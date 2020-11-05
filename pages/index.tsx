@@ -1,13 +1,11 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
+import Api from '../helpers/apiHelpers';
+import { GetStaticProps } from 'next';
 
-export default function Home() {
+export default function Home({ posts }) {
+ 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
@@ -62,4 +60,13 @@ export default function Home() {
       </footer>
     </div>
   )
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const res = await Api.getPosts();
+  return {
+    props: {
+      posts: res.data,
+    }
+  }
 }
