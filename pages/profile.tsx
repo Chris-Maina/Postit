@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { CircularProgress } from '@material-ui/core';
 import { useAuthContext, useIsLogged } from '../helpers/authHelpers';
 import { useEffect } from 'react';
+import AppDrawer from '../components/Drawer';
 
 const Profile = () => {
  const router = useRouter();
@@ -21,10 +22,10 @@ const Profile = () => {
     return <CircularProgress />;
   }
   return (
-    <div>
+    <AppDrawer>
       <h3>User: {user.first_name} - {user.last_name}</h3>
       <p>{user.email}</p>
-    </div>
+    </AppDrawer>
   )
 }
 
