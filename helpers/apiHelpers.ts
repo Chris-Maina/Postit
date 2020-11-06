@@ -33,6 +33,11 @@ const register = (data): Promise<any> => {
   });
 }
 
+const addPost = async (data) => {
+  await addTokenToHeaders();
+  return axiosInstance.post('/posts', { ...data });
+}
+
 const getPosts = () => {
   return axiosInstance.get('/posts');
 }
@@ -48,6 +53,7 @@ const fetchUser = async (userId) => {
 
 export default {
   login,
+  addPost,
   getPost,
   register,
   getPosts,
