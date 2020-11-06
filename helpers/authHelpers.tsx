@@ -222,7 +222,7 @@ const useProvideAuth = () => {
       });
 
       //  add tokens to local storage
-      tokenProvider.setToken({ accessToken: access_token, refreshToken: refresh_token });
+      tokenProvider.setToken({ access_token, refresh_token });
       router.push('/');
     } catch (error) {
       setLoading(false);
