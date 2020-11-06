@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import clsx from "clsx";
 import List from '@material-ui/core/List';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -92,10 +92,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AppDrawer = (props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const theme = useTheme();
   const classes = useStyles();
-  const { user } = useAuthContext();
+  const { user, fetchUser } = useAuthContext();
+  useEffect(() => {
+    if (!Object.keys(user).length) {
+      fetchUser();
+    }
+  }, [user]);
 
   return (
     <div className={classes.root}>
@@ -139,7 +144,7 @@ const AppDrawer = (props) => {
           <NavItem linkTo="/" linkText="Posts" />
         </List>
         {Object.keys(user).length ? (
-          <List>
+          <List className={classes.bottomNav}>
             <NavItem linkTo="/profile" linkText={`${user.first_name} ${user.last_name}`} />
           </List>
         ) : (
@@ -153,6 +158,7 @@ const AppDrawer = (props) => {
           [classes.contentShift]: open,
         })}
       >
+        <div className={classes.drawerHeader} />
         {props.children}
       </main>
       <footer className={classes.footer}>
