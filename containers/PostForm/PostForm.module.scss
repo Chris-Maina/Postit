@@ -1,4 +1,10 @@
 .Form {
+  margin-bottom: 8px;
+  padding: 0px 24px;
+
+  &_Button_Wrapper {
+    text-align: right;
+  }
   &_Button {
     margin-left: auto;
   }

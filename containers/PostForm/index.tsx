@@ -26,6 +26,7 @@ const PostForm = () => {
     try {
       await Api.addPost({ title, created_by: user.id });
       setTitle("");
+      setError("");
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
@@ -37,13 +38,12 @@ const PostForm = () => {
 
 
   return (
-    <form onSubmit={onSubmit}>
-      <FormControl>
+    <form className={classes.Form} onSubmit={onSubmit}>
+      <FormControl fullWidth>
         <FormHelperText error={!!error}>{error}</FormHelperText>
         <InputBase 
           required
           multiline
-          fullWidth
           rowsMin={2}
           name="title"
           value={title}
@@ -51,16 +51,17 @@ const PostForm = () => {
           placeholder="Write your post here"
         />
       </FormControl>
-      <Button 
-        type="submit"
-        variant="contained"
-        classes={{
-          root: classes.Form_Button_Root
-        }}
-        className={classes.Form_Button}
-      >
-        Add post
-      </Button>
+      <div className={classes.Form_Button_Wrapper}>
+        <Button 
+          type="submit"
+          variant="contained"
+          classes={{
+            root: classes.Form_Button_Root
+          }}
+        >
+          Add post
+        </Button>
+      </div>
     </form>
   )
 }
