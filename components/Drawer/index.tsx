@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    width: '100%',
+    padding: `${theme.spacing(3)} 0px`,
     transition: theme.transitions.create('margin', { 
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -80,9 +81,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100px',
     borderTop: '1px solid #eaeaea',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    margin: '0 auto',
   },
   footerA: {
     display: 'flex',
@@ -153,24 +152,26 @@ const AppDrawer = (props) => {
           </List>
         )}
       </Drawer>
-      <main
+      <div
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} />
-        {props.children}
-      </main>
-      <footer className={classes.footer}>
-        <a
-          className={classes.footerA}
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by NextJS
-        </a>
-      </footer>
+        <main>
+          <div className={classes.drawerHeader} />
+          {props.children}
+        </main>
+        <footer className={classes.footer}>
+          <a
+            className={classes.footerA}
+            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Powered by NextJS
+          </a>
+        </footer>
+      </div>
     </div>
   );
 }
