@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
 import InputBase from "@material-ui/core/InputBase";
@@ -9,11 +9,17 @@ import classes from './PostForm.module.scss';
 import { useAuthContext } from "../../helpers/authHelpers";
 
 
-const PostForm = () => {
+const PostForm = ({ post, onCancel }) => {
 
   const { user } = useAuthContext();
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    if (Object.keys(post).length) {
+      setTitle(post.title)
+    }
+  }, [post])
 
   const onChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target;
@@ -36,6 +42,11 @@ const PostForm = () => {
     }
   }
 
+  const onCancelClick = () => {
+    setTitle("");
+    onCancel();
+  }
+
 
   return (
     <form className={classes.Form} onSubmit={onSubmit}>
@@ -44,6 +55,7 @@ const PostForm = () => {
         <InputBase 
           required
           multiline
+          autoFocus
           rowsMin={2}
           name="title"
           value={title}
@@ -54,13 +66,29 @@ const PostForm = () => {
       <div className={classes.Form_Button_Wrapper}>
         <Button 
           type="submit"
+          color="primary"
           variant="contained"
+          disabled={!(user && user.id)}
+          className={classes.Form_Button}
           classes={{
             root: classes.Form_Button_Root
           }}
         >
-          Add post
+          {Object.keys(post).length? 'Edit post' : 'Add post'}
         </Button>
+        {Object.keys(post).length ? (
+          <Button
+            type="button"
+            variant="contained"
+            color="secondary"
+            onClick={onCancelClick}
+            classes={{
+              root: classes.Form_Button_Root
+            }}
+          >
+            Cancel
+          </Button>
+        ): null}
       </div>
     </form>
   )
