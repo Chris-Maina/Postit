@@ -4,7 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 const NavItem = ({linkText, linkTo}) => {
   return (
-    <ListItem>
+    <ListItem button>
       <ListItemText>
         <Link href={linkTo}>
           <a>{linkText}</a>

@@ -1,19 +1,26 @@
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import List from '@material-ui/core/List';
-import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
+import MenuIcon from '@material-ui/icons/Menu';
 import Divider from "@material-ui/core/Divider";
 import Toolbar from '@material-ui/core/Toolbar';
+import ListItem from '@material-ui/core/ListItem';
+import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import useTheme from '@material-ui/core/styles/useTheme';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-import { useAuthContext } from "../../helpers/authHelpers";
 import NavItem from "../NavItem";
+import { useAuthContext } from "../../helpers/authHelpers";
 
 const drawerWidth = 240;
 
@@ -75,7 +82,8 @@ const useStyles = makeStyles((theme) => ({
   },
   bottomNav: {
     position: 'absolute',
-    bottom: '0px'
+    bottom: '0px',
+    width: '100%',
   },
   footer: {
     width: '100%',
@@ -92,14 +100,21 @@ const useStyles = makeStyles((theme) => ({
 
 const AppDrawer = (props) => {
   const [open, setOpen] = useState(true);
+  const [profileOpen, setProfileOpen] = useState(false);
+
   const theme = useTheme();
   const classes = useStyles();
-  const { user, fetchUser } = useAuthContext();
+  const { user, fetchUser, logout } = useAuthContext();
   useEffect(() => {
     if (!Object.keys(user).length) {
       fetchUser();
     }
   }, [user]);
+
+  const handleToggleClick = () => {
+    setProfileOpen(!profileOpen);
+  }
+
 
   return (
     <div className={classes.root}>
@@ -144,7 +159,20 @@ const AppDrawer = (props) => {
         </List>
         {Object.keys(user).length ? (
           <List className={classes.bottomNav}>
-            <NavItem linkTo="/profile" linkText={`${user.first_name} ${user.last_name}`} />
+            <ListItem button onClick={handleToggleClick}>
+              <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+              <ListItemIcon>
+                {profileOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />} 
+              </ListItemIcon>
+            </ListItem>
+            <Collapse in={profileOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <NavItem linkTo="/profile" linkText="Profile" />
+                <ListItem button onClick={logout}>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              </List>
+            </Collapse>
           </List>
         ) : (
           <List className={classes.bottomNav}>
