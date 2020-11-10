@@ -46,6 +46,11 @@ const getPost = (postId) => {
   return axiosInstance.get(`/posts/${postId}`);
 }
 
+const deletePost = async (postId) => {
+  await addTokenToHeaders();
+  return axiosInstance.delete(`/posts/${postId}`);
+}
+
 const fetchUser = async (userId) => {
   await addTokenToHeaders();
   return axiosInstance.get(`/auth/user/${userId}`);
@@ -58,5 +63,6 @@ export default {
   register,
   getPosts,
   fetchUser,
+  deletePost,
   getAccessRefreshToken,
 }

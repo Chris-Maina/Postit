@@ -155,6 +155,7 @@ interface IAuthContext {
   register?: (data: IUserPayload) => void,
   login?: (data: IUserPayload) => void,
   fetchUser?: () => void,
+  logout?: () => void,
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -237,6 +238,7 @@ const useProvideAuth = () => {
 
   const logout = (): void => {
     tokenProvider.setToken(null);
+    setUser({});
   }
 
   const fetchUser = async () => {
