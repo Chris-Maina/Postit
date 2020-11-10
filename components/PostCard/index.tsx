@@ -12,7 +12,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './PostCard.module.scss';
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, onEdit, onDelete }) => {
   return (
     <>
     <ListItem>
@@ -35,10 +35,10 @@ const PostCard = ({ post }) => {
       }
       secondary={<Typography color="textPrimary">{post.title}</Typography>} />
       <ListItemSecondaryAction>
-        <IconButton size="small">
+        <IconButton size="small" onClick={() => onEdit(post)}>
           <EditIcon />
         </IconButton>
-        <IconButton size="small">
+        <IconButton size="small" onClick={() => onDelete(post.id)}>
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
