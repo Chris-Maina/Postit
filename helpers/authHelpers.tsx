@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {useRouter} from 'next/router';
 import Api from "./apiHelpers";
+import { IUser } from '../common/interfaces';
 
 /** 
  * @name createTokenProvider - Token Provider
@@ -140,11 +141,8 @@ export const useIsLogged = () => {
 }
 
 
-interface IUserPayload {
-  email: string,
+interface IUserPayload extends IUser {
   password: string,
-  first_name?: string,
-  last_name?: string,
   confirmPassword?: string,
 }
 
@@ -245,7 +243,6 @@ const useProvideAuth = () => {
     try {
       const userId = tokenProvider.getUserId();
 
-      if (!userId) return router.push('/login');
       const response = await Api.fetchUser(userId);
       const  { first_name, last_name, email, id } = response.data;
       setUser({

@@ -56,13 +56,22 @@ const fetchUser = async (userId) => {
   return axiosInstance.get(`/auth/user/${userId}`);
 }
 
+const updatePost = async (data) => {
+  await addTokenToHeaders();
+  return axiosInstance.patch(`/posts/${data.id}`, { ...data })
+}
+
+const fetcher = url => axiosInstance.get(url).then(res => res.data);
+
 export default {
   login,
+  fetcher,
   addPost,
   getPost,
   register,
   getPosts,
   fetchUser,
   deletePost,
+  updatePost,
   getAccessRefreshToken,
 }
