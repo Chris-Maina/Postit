@@ -4,13 +4,18 @@ import EditIcon from "@material-ui/icons/Edit";
 import Divider from '@material-ui/core/Divider';
 import ListItem from "@material-ui/core/ListItem";
 import DeleteIcon from "@material-ui/icons/Delete";
+// import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+// import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './PostCard.module.scss';
+import { getUserInitial, getUserFullname } from '../../helpers/postHelpers';
 
 const PostCard = ({ post, onEdit, onDelete }) => {
   return (
@@ -18,22 +23,48 @@ const PostCard = ({ post, onEdit, onDelete }) => {
     <ListItem>
       <ListItemAvatar>
         <Avatar>
-          {post.created_by}
+          {getUserInitial(post.posted_by)}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={
-        <>
-          <Typography className={classes.Item_Author} component="span">Chris Maina</Typography>
-          <Typography 
-            component="span"
-            variant="caption"
-            color="textSecondary"
-          >
-              {format(new Date(post.created_at), 'dd-MM-yy')}
+      <ListItemText 
+        primary={
+          <>
+            <Typography
+              className={classes.Item_Author}
+              component="span"
+            >
+              {getUserFullname(post.posted_by)}
             </Typography>
-        </>
-      }
-      secondary={<Typography color="textPrimary">{post.title}</Typography>} />
+            <Typography 
+              component="span"
+              variant="caption"
+              color="textSecondary"
+            >
+                {format(new Date(post.created_at), 'dd MMM yyyy')}
+              </Typography>
+          </>
+        }
+        secondary={
+            <>
+              <Typography color="textPrimary">{post.title}</Typography>
+              <div>
+                <IconButton 
+                  aria-label="thumb-up"
+                  size="small"
+                >
+                  <ThumbUpOutlinedIcon />
+                </IconButton>
+                <span className={classes.Item_Votes}>{post.vote_count}</span>
+                <IconButton
+                  aria-label="thumb-down"
+                  size="small"
+                >
+                  <ThumbDownOutlinedIcon />
+                </IconButton>
+              </div>
+            </>
+          }
+        />
       <ListItemSecondaryAction>
         <IconButton size="small" onClick={() => onEdit(post)}>
           <EditIcon />
