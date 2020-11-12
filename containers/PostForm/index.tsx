@@ -1,3 +1,4 @@
+import { mutate } from "swr";
 import { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
@@ -30,9 +31,15 @@ const PostForm = ({ post, onCancel }) => {
   const onSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
     try {
-      await Api.addPost({ title, created_by: user.id });
-      setTitle("");
-      setError("");
+      if (Object.keys(post).length) {
+        await Api.updatePost({ ...post, title });
+      } else {
+        await Api.addPost({ title, created_by: user.id });
+      }
+      onCancelClick()
+
+      // Revalidate posts
+      mutate('/posts');
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
@@ -44,6 +51,7 @@ const PostForm = ({ post, onCancel }) => {
 
   const onCancelClick = () => {
     setTitle("");
+    setError("");
     onCancel();
   }
 
@@ -79,7 +87,7 @@ const PostForm = ({ post, onCancel }) => {
         {Object.keys(post).length ? (
           <Button
             type="button"
-            variant="contained"
+            variant="outlined"
             color="secondary"
             onClick={onCancelClick}
             classes={{

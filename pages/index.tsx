@@ -1,19 +1,24 @@
+import useSWR, { mutate } from 'swr';
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
-import Api from '../helpers/apiHelpers';
 import List from '@material-ui/core/List';
+import LoginDialog from '../components/LoginDialog';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import Api from '../helpers/apiHelpers';
 import AppDrawer from '../components/Drawer';
-import styles from '../styles/Home.module.css';
 import PostForm from '../containers/PostForm';
 import PostCard from '../components/PostCard';
-import LoginDialog from '../components/LoginDialog';
-import { useState } from 'react';
+// import styles from '../styles/Home.module.css';
 import { useAuthContext } from '../helpers/authHelpers';
 
 export default function Home({ posts }) {
   const { user } = useAuthContext();
-  const [open, setOpen] = useState(false);
   const [post, setPost] = useState({});
+  const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
+  const { data, error: postsErr } = useSWR('/posts', Api.fetcher, { initialData: posts })
 
 
   const onEditClick = post => {
@@ -33,8 +38,13 @@ export default function Home({ posts }) {
       setOpen(true)
     } else {
       try {
-        const response = Api.deletePost(postId);
-        setError("")
+        Api.deletePost(postId);
+        if (error) {
+          setError("");
+        }
+        
+        // Update cache and not revalidate
+        mutate('/posts', data.filter(el => el.id !== postId), false);
       } catch (error) {
         if (error.response && error.response.data.error.message) {
           setError(error.response.data.error.message);
@@ -47,17 +57,23 @@ export default function Home({ posts }) {
 
   return (
     <AppDrawer>
+      <FormHelperText error={!!error || !!postsErr}>{error || postsErr}</FormHelperText>
       <PostForm post={post} onCancel={onCancelClick} />
-      <List>
-        {posts.map(post => (
-          <PostCard 
-            key={post.id}
-            post={post}
-            onEdit={onEditClick}
-            onDelete={onDeleteClick}
-          />
-        ))}
-      </List>
+      {!data 
+        ? (<CircularProgress />) 
+        : (
+          <List>
+            {data?.map(post => (
+              <PostCard 
+                key={post.id}
+                post={post}
+                onEdit={onEditClick}
+                onDelete={onDeleteClick}
+              />
+            ))}
+          </List>
+        )
+      }
       <LoginDialog open={open} onClose={() => setOpen(false)} />
     </AppDrawer>
   )
