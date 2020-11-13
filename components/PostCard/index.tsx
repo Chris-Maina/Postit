@@ -4,10 +4,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import Divider from '@material-ui/core/Divider';
 import ListItem from "@material-ui/core/ListItem";
 import DeleteIcon from "@material-ui/icons/Delete";
-// import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-// import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
@@ -15,9 +15,16 @@ import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './PostCard.module.scss';
-import { getUserInitial, getUserFullname } from '../../helpers/postHelpers';
+import { getUserInitial, getUserFullname, hasVoted, getVoteCount } from '../../helpers/postHelpers';
 
-const PostCard = ({ post, onEdit, onDelete }) => {
+const PostCard = ({ 
+    post,
+    user,
+    onEdit,
+    onVote,
+    onDelete,
+  }) => {
+  const vote = hasVoted(post, user);
   return (
     <>
     <ListItem>
@@ -51,15 +58,17 @@ const PostCard = ({ post, onEdit, onDelete }) => {
                 <IconButton 
                   aria-label="thumb-up"
                   size="small"
+                  onClick={() => onVote(post.id, '1')}
                 >
-                  <ThumbUpOutlinedIcon />
+                  {vote && vote.vote_type === '1' ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
                 </IconButton>
-                <span className={classes.Item_Votes}>{post.vote_count}</span>
+                <span className={classes.Item_Votes}>{getVoteCount(post)}</span>
                 <IconButton
                   aria-label="thumb-down"
                   size="small"
+                  onClick={() => onVote(post.id, '-1')}
                 >
-                  <ThumbDownOutlinedIcon />
+                  {vote && vote.vote_type === '-1' ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon />}
                 </IconButton>
               </div>
             </>

@@ -55,6 +55,27 @@ export default function Home({ posts }) {
     }
   }
 
+  const upvoteOrDownVote = async (postId, voteType) => {
+    if (!Object.keys(user).length) {
+      setOpen(true)
+    }
+
+    try {
+      await Api.vote({
+        post_id: postId,
+        vote_type: voteType,
+        user_id: user.id,
+      });
+      mutate('/posts');
+    } catch (error) {
+      if (error.response && error.response.data.error.message) {
+        setError(error.response.data.error.message);
+      } else {
+        setError('Could not complete your request');
+      }
+    }
+  }
+
   return (
     <AppDrawer>
       <FormHelperText error={!!error || !!postsErr}>{error || postsErr}</FormHelperText>
@@ -67,8 +88,10 @@ export default function Home({ posts }) {
               <PostCard 
                 key={post.id}
                 post={post}
+                user={user}
                 onEdit={onEditClick}
                 onDelete={onDeleteClick}
+                onVote={upvoteOrDownVote}
               />
             ))}
           </List>

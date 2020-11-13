@@ -61,9 +61,15 @@ const updatePost = async (data) => {
   return axiosInstance.patch(`/posts/${data.id}`, { ...data })
 }
 
+const vote = async (data) => {
+  await addTokenToHeaders();
+  return axiosInstance.post('/vote', data);
+}
+
 const fetcher = url => axiosInstance.get(url).then(res => res.data);
 
 export default {
+  vote,
   login,
   fetcher,
   addPost,
