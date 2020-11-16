@@ -1,0 +1,44 @@
+.Section {
+  margin-left: 40px;
+  margin-bottom: 50px;
+
+  &_General {
+    display: flex;
+
+    &_Form {
+      flex: 1
+    }
+  }
+
+  &_Avatar {
+    margin-right: 30px;
+    width: 250px !important;
+    height: 250px !important;
+    font-size: 6.5rem !important;
+  }
+
+  &_Form {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+
+    &_Label {
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    &_Field {
+      background-color: gray;
+    }
+
+    &_Button {
+      width: 20%;
+      margin-top: 10px !important;
+    }
+
+    &_Button_Root {
+      border-radius: 15px !important;
+    }
+  }
+}
