@@ -66,6 +66,15 @@ const vote = async (data) => {
   return axiosInstance.post('/vote', data);
 }
 
+const updateUser = async (data) => {
+  await addTokenToHeaders();
+  return axiosInstance.patch(`/auth/user/${data.id}`, { ...data })
+}
+
+const resetPassord = (data) => {
+  return axiosInstance.patch(`/reset-password`, { ...data })
+}
+
 const fetcher = url => axiosInstance.get(url).then(res => res.data);
 
 export default {
@@ -79,5 +88,7 @@ export default {
   fetchUser,
   deletePost,
   updatePost,
+  updateUser,
+  resetPassord,
   getAccessRefreshToken,
 }

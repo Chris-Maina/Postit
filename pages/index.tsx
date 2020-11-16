@@ -107,7 +107,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   return {
     revalidate: 1,
     props: {
-      posts: res.data,
+      posts: res.data || [],
     },
   }
 }

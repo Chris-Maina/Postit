@@ -154,6 +154,7 @@ interface IAuthContext {
   login?: (data: IUserPayload) => void,
   fetchUser?: () => void,
   logout?: () => void,
+  updateUser?: (user:IUser) => void,
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -250,12 +251,40 @@ const useProvideAuth = () => {
         email,
         first_name,
         last_name,
+        posts: response.data?.posts || []
       });
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
       } else {
         setError('Could not fetch user. Try again');
+      }
+    }
+  }
+
+  const updateUser = async (data) => {
+    try {
+      let userId = data.id;
+      if(!userId) {
+        userId = tokenProvider.getUserId();
+      }
+      const response = await Api.updateUser({
+        ...data,
+        id: userId,
+      });
+      const  { first_name, last_name, email, id } = response.data;
+      setUser({
+        id,
+        email,
+        first_name,
+        last_name,
+        posts: response.data?.posts || []
+      });
+    } catch (error) {
+      if (error.response && error.response.data.error.message) {
+        setError(error.response.data.error.message);
+      } else {
+        setError('Could not update user. Try again');
       }
     }
   }
@@ -268,5 +297,6 @@ const useProvideAuth = () => {
     logout,
     register,
     fetchUser,
+    updateUser,
   }
 }

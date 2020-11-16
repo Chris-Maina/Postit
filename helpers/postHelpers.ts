@@ -8,8 +8,15 @@ export const getUserInitial = (user: IUser): string => {
   }
 }
 
-export const getUserFullname = (user: IUser): string => 
-  `${user.first_name} ${user.last_name}`
+export const getUserFullname = (user: IUser): string => {
+  if (user.first_name && !user.last_name) {
+    return user.first_name;
+  }
+  if (!user.first_name && user.last_name) {
+    return user.last_name;
+  }
+  return `${user.first_name} ${user.last_name}`;
+}
 
 
 export const hasVoted = (post, user) => {
