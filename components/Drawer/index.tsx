@@ -145,6 +145,7 @@ const AppDrawer = (props) => {
         <Divider />
         <List>
           <NavItem linkTo="/" linkText="Posts" />
+          <NavItem linkTo="/users" linkText="Users" />
         </List>
         {Object.keys(user).length ? (
           <List className={classes.bottomNav}>

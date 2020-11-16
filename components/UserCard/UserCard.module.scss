@@ -1,0 +1,17 @@
+.Card {
+  padding: 16px;
+
+  &_Avatar {
+    margin-right: 8px;
+  }
+
+  &_Wrapper {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  &_PostIcon {
+    margin-right: 8px;
+  }
+}

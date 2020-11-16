@@ -59,8 +59,8 @@ const PostCard = ({
               variant="caption"
               color="textSecondary"
             >
-                {format(new Date(post.created_at), 'dd MMM yyyy')}
-              </Typography>
+              {format(new Date(post.created_at), 'dd MMM yyyy')}
+            </Typography>
           </>
         }
         secondary={

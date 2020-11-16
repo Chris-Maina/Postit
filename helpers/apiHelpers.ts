@@ -75,6 +75,10 @@ const resetPassord = (data) => {
   return axiosInstance.patch(`/reset-password`, { ...data })
 }
 
+const getUsers = () => {
+  return axiosInstance.get(`/auth/users`);
+}
+
 const fetcher = url => axiosInstance.get(url).then(res => res.data);
 
 export default {
@@ -85,6 +89,7 @@ export default {
   getPost,
   register,
   getPosts,
+  getUsers,
   fetchUser,
   deletePost,
   updatePost,
