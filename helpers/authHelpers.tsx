@@ -244,6 +244,7 @@ const useProvideAuth = () => {
     try {
       const userId = tokenProvider.getUserId();
 
+      if (!userId) return null;
       const response = await Api.fetchUser(userId);
       const  { first_name, last_name, email, id } = response.data;
       setUser({
