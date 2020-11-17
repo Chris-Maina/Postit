@@ -83,18 +83,18 @@ const LoginForm = () => {
     <form onSubmit={onSubmit} className={classes.Form}>
       <FormHelperText error={!!error}>{error}</FormHelperText>
 
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Email</label>
         <OutlinedInput onChange={onChange} type="email" name="email" value={formData.email} required />
         <FormHelperText error={!!errors.email}>{errors.email}</FormHelperText>
       </FormControl>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Password</label>
         <OutlinedInput onChange={onChange} type="password" name="password" value={formData.password} required />
         <FormHelperText error={!!errors.password}>{errors.password}</FormHelperText>
       </FormControl>
       <div className={classes.Form_Button}>
-        {loading ? <CircularProgress /> : <Button type="submit">Login</Button>}
+        {loading ? <CircularProgress /> : <Button type="submit" variant="contained"  color="primary" fullWidth>Login</Button>}
       </div>
     </form>
   )

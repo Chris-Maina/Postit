@@ -2,4 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+
+  &_Wrapper {
+    padding: 40px;
+  }
+
+  &_Title {
+    text-align: center;
+  }
 }

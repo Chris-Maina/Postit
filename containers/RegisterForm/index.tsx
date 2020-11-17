@@ -93,32 +93,32 @@ const RegisterForm = () => {
   return (
     <form onSubmit={onSubmit} className={classes.Form}>
       <FormHelperText error={!!error}>{error}</FormHelperText>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>First name</label>
         <OutlinedInput onChange={onChange} type="text" name="firstName" value={formData.firstName} required />
         <FormHelperText error={!!errors.firstName}>{errors.firstName}</FormHelperText>
       </FormControl>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Last name</label>
         <OutlinedInput onChange={onChange} type="text" name="lastName" value={formData.lastName} />
       </FormControl>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Email</label>
         <OutlinedInput onChange={onChange} type="email" name="email" value={formData.email} required />
         <FormHelperText error={!!errors.email}>{errors.email}</FormHelperText>
       </FormControl>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Password</label>
         <OutlinedInput onChange={onChange} type="password" name="password" value={formData.password} required />
         <FormHelperText error={!!errors.password}>{errors.password}</FormHelperText>
       </FormControl>
-      <FormControl className={classes.Form_Control}>
+      <FormControl margin="dense" className={classes.Form_Control}>
         <label>Confrim password</label>
         <OutlinedInput onChange={onChange} type="password" name="confirmPassword" value={formData.confirmPassword} required />
         <FormHelperText error={!!errors.confirmPassword}>{errors.confirmPassword}</FormHelperText>
       </FormControl>
       <div className={classes.Form_Button}>
-        {loading ? <CircularProgress /> : <Button type="submit">Register</Button>}
+        {loading ? <CircularProgress /> : <Button type="submit" variant="contained"  color="primary" fullWidth>Register</Button>}
       </div>
     </form>
   )
