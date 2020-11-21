@@ -31,7 +31,7 @@ const LoginDialog = ({ open, onClose }) => {
         />
       </DialogTitle>
       <DialogContent>
-        <LoginForm />
+        <LoginForm isDialog onClose={onClose} />
       </DialogContent>
     </Dialog>
   )
