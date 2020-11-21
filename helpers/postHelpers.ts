@@ -20,7 +20,7 @@ export const getUserFullname = (user: IUser): string => {
 
 
 export const hasVoted = (post, user) => {
-  if (!Object.keys(user).length || !Object.keys(post).length) return null;
+  if (!Object.values(user).length || !Object.keys(post).length) return null;
   if (!post.votes || !post.votes.length) return null;
   return post.votes.reverse().find(vote => vote.user_id === user.id);
 }

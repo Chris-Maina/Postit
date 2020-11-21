@@ -36,7 +36,7 @@ const PostCard = ({
     isProfile,
   }: IPostCard) => {
   const postAuthor = post?.posted_by || user;
-  const vote = Object.keys(user).length ? hasVoted(post, user) : null;
+  const vote = (user && Object.values(user).length) ? hasVoted(post, user) : null;
   return (
     <>
     <ListItem alignItems="flex-start">
