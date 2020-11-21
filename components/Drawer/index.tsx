@@ -93,12 +93,14 @@ const AppDrawer = (props) => {
 
   const theme = useTheme();
   const classes = useStyles();
-  const { user, fetchUser, logout } = useAuthContext();
+  const { user, token, fetchUser, logout, getToken } = useAuthContext();
+
   useEffect(() => {
-    if (!Object.keys(user).length) {
+    getToken();
+    if (token && !user) {
       fetchUser();
     }
-  }, [user]);
+  }, [token, user]);
 
   const handleToggleClick = () => {
     setProfileOpen(!profileOpen);
@@ -147,8 +149,8 @@ const AppDrawer = (props) => {
           <NavItem linkTo="/" linkText="Posts" />
           <NavItem linkTo="/users" linkText="Users" />
         </List>
-        {Object.keys(user).length ? (
-          <List className={classes.bottomNav}>
+        {(user && Object.values(user).length) ? (
+          <List dense className={classes.bottomNav}>
             <ListItem button onClick={handleToggleClick}>
               <ListItemText primary={`${user.first_name} ${user.last_name}`} />
               <ListItemIcon>
@@ -156,7 +158,7 @@ const AppDrawer = (props) => {
               </ListItemIcon>
             </ListItem>
             <Collapse in={profileOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List dense component="div" disablePadding>
                 <NavItem linkTo="/profile" linkText="Profile" />
                 <ListItem button onClick={logout}>
                   <ListItemText primary="Logout" />
@@ -165,8 +167,9 @@ const AppDrawer = (props) => {
             </Collapse>
           </List>
         ) : (
-          <List className={classes.bottomNav}>
+          <List dense className={classes.bottomNav}>
             <NavItem linkTo="/login" linkText="Login" />
+            <NavItem linkTo="/register" linkText="Register" />
           </List>
         )}
       </Drawer>
