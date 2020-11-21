@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import List from '@material-ui/core/List';
@@ -18,7 +17,7 @@ import AppDrawer from '../../components/Drawer';
 import { IUser } from '../../common/interfaces';
 import PostCard from '../../components/PostCard';
 import { getUserInitial } from '../../helpers/postHelpers';
-import { useAuthContext, useIsLogged } from '../../helpers/authHelpers';
+import { useAuthContext } from '../../helpers/authHelpers';
 import { validateEmail, validateMinLength, validateReguired } from '../../helpers/formUtils';
 
 interface IFormErrors {
@@ -30,7 +29,6 @@ interface IFormErrors {
 }
 
 const Profile = () => {
-  const router = useRouter();
   const [userData, setUserData] = useState<IUser>({
     first_name: '',
     last_name: '',
@@ -48,14 +46,11 @@ const Profile = () => {
     current: '',
     new: '',
   });
-  const { user, fetchUser, updateUser } = useAuthContext();
+  const { user, token, fetchUser, updateUser } = useAuthContext();
 
-  if (typeof window !== 'undefined' && !useIsLogged()) {
-    router.push('/login');
-  };
   
   useEffect(() => {
-    if (!Object.keys(user).length) {
+    if (!user || !Object.values(user).length) {
       fetchUser();
     } else {
       setUserData(user)
@@ -123,7 +118,11 @@ const Profile = () => {
       setErrors(errors);
     } else {
       // update user information
-      updateUser(userData);
+      const payload = {
+        ...userData,
+        token
+      }
+      updateUser(payload);
     }
   }
 
@@ -147,7 +146,7 @@ const Profile = () => {
   }
 
 
-  if (!user || !Object.keys(user).length) {
+  if (!user || !Object.values(user).length) {
     return <CircularProgress />;
   }
 
@@ -227,7 +226,7 @@ const Profile = () => {
         <List dense>
           {(user.posts && user.posts.length) ? user.posts.map(post => (
             <PostCard
-              key={user}
+              key={post.id}
               post={post}
               user={user}
               isProfile={true}

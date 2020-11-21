@@ -12,7 +12,7 @@ import { useAuthContext } from "../../helpers/authHelpers";
 
 const PostForm = ({ post, onCancel }) => {
 
-  const { user } = useAuthContext();
+  const {isLoggedIn, token} = useAuthContext();
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
 
@@ -32,9 +32,9 @@ const PostForm = ({ post, onCancel }) => {
     evt.preventDefault();
     try {
       if (Object.keys(post).length) {
-        await Api.updatePost({ ...post, title });
+        await Api.updatePost({ ...post, title, token });
       } else {
-        await Api.addPost({ title, created_by: user.id });
+        await Api.addPost({ title, token });
       }
       onCancelClick()
 
@@ -76,7 +76,7 @@ const PostForm = ({ post, onCancel }) => {
           type="submit"
           color="primary"
           variant="contained"
-          disabled={!(user && user.id)}
+          disabled={!isLoggedIn()}
           className={classes.Form_Button}
           classes={{
             root: classes.Form_Button_Root

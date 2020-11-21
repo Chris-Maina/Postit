@@ -1,5 +1,5 @@
 import useSWR, { mutate } from 'swr';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GetStaticProps } from 'next';
 import List from '@material-ui/core/List';
 import LoginDialog from '../components/LoginDialog';
@@ -10,19 +10,17 @@ import Api from '../helpers/apiHelpers';
 import AppDrawer from '../components/Drawer';
 import PostForm from '../containers/PostForm';
 import PostCard from '../components/PostCard';
-// import styles from '../styles/Home.module.css';
 import { useAuthContext } from '../helpers/authHelpers';
 
 export default function Home({ posts }) {
-  const { user } = useAuthContext();
+  const { user, token, isLoggedIn } = useAuthContext();
   const [post, setPost] = useState({});
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
-  const { data, error: postsErr } = useSWR('/posts', Api.fetcher, { initialData: posts })
-
+  const { data, error: postsErr } = useSWR('/posts', Api.fetcher, { initialData: posts });
 
   const onEditClick = post => {
-    if (!Object.keys(user).length) {
+    if (!isLoggedIn()) {
       setOpen(true)
     } else {
       setPost(post);
@@ -34,11 +32,11 @@ export default function Home({ posts }) {
   }
 
   const onDeleteClick = postId => {
-    if (!Object.keys(user).length) {
+    if (!isLoggedIn()) {
       setOpen(true)
     } else {
       try {
-        Api.deletePost(postId);
+        Api.deletePost({ postId, token });
         if (error) {
           setError("");
         }
@@ -56,14 +54,14 @@ export default function Home({ posts }) {
   }
 
   const upvoteOrDownVote = async (postId, voteType) => {
-    if (!Object.keys(user).length) {
+    if (!isLoggedIn()) {
       setOpen(true)
     } else {
       try {
         await Api.vote({
           post_id: postId,
           vote_type: voteType,
-          user_id: user.id,
+          token,
         });
         mutate('/posts');
       } catch (error) {
