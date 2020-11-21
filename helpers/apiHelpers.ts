@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { createTokenProvider } from './authHelpers';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE;
 
@@ -7,20 +6,16 @@ const axiosInstance = axios.create({
   baseURL: baseUrl,
 });
 
-const addTokenToHeaders = async () => {
-  const tokenProvider = createTokenProvider();
-  const token = await tokenProvider.getToken();
+const addTokenToHeaders = token => {
   axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
 
-const getAccessRefreshToken = (refreshToken: string): Promise<any> => {
-  return axiosInstance.post('/auth/refresh-token', {
-    refresh_token: refreshToken
-  });
+const getAccessRefreshToken = (): Promise<any> => {
+  return axiosInstance.get('/auth/refresh-token', { withCredentials: true });
 }
 
 const login = (data): Promise<any> => {
-  return axiosInstance.post('/auth/login', data);
+  return axiosInstance.post('/auth/login', data, { withCredentials: true });
 }
 
 const register = (data): Promise<any> => {
@@ -34,7 +29,8 @@ const register = (data): Promise<any> => {
 }
 
 const addPost = async (data) => {
-  await addTokenToHeaders();
+  addTokenToHeaders(data.token);
+  delete data.token;
   return axiosInstance.post('/posts', { ...data });
 }
 
@@ -46,28 +42,31 @@ const getPost = (postId) => {
   return axiosInstance.get(`/posts/${postId}`);
 }
 
-const deletePost = async (postId) => {
-  await addTokenToHeaders();
+const deletePost = async ({ postId, token }) => {
+  addTokenToHeaders(token);
   return axiosInstance.delete(`/posts/${postId}`);
 }
 
-const fetchUser = async (userId) => {
-  await addTokenToHeaders();
+const fetchUser = async ({ userId, token }) => {
+  addTokenToHeaders(token);
   return axiosInstance.get(`/auth/user/${userId}`);
 }
 
 const updatePost = async (data) => {
-  await addTokenToHeaders();
+  addTokenToHeaders(data.token);
+  delete data.token;
   return axiosInstance.patch(`/posts/${data.id}`, { ...data })
 }
 
 const vote = async (data) => {
-  await addTokenToHeaders();
+  addTokenToHeaders(data.token);
+  delete data.token;
   return axiosInstance.post('/vote', data);
 }
 
 const updateUser = async (data) => {
-  await addTokenToHeaders();
+  addTokenToHeaders(data.token);
+  delete data.token;
   return axiosInstance.patch(`/auth/user/${data.id}`, { ...data })
 }
 
