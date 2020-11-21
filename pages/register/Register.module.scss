@@ -6,9 +6,14 @@
 
   &_Wrapper {
     padding: 40px;
+    border-radius: 10px !important;
   }
 
   &_Title {
+    text-align: center;
+  }
+
+  &_Caption {
     text-align: center;
   }
 }

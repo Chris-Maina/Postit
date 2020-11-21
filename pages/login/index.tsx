@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
@@ -17,6 +18,12 @@ const Register = () => {
           Postit
         </Typography>
         <LoginForm />
+        <Typography 
+          color="textPrimary"
+          className={classes.Register_Caption}
+        >
+          Do not have an account? <Link href="/register"><a color="primary">Register</a></Link>
+        </Typography>
       </Paper>
     </div>
   );
