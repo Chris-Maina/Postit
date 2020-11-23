@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
 import {useRouter} from 'next/router';
+import { createContext, useContext, useState } from "react";
 import Api from "./apiHelpers";
 import { IUser } from '../common/interfaces';
 
@@ -103,6 +103,9 @@ const useProvideAuth = () => {
     try {
       setLoading(true);
       const response = await Api.login(payload);
+
+      // Remove item from local storage
+      window.localStorage.removeItem('logout');
       setLoading(false);
       const  { first_name, last_name, email, id, access_token } = response.data;
       
@@ -129,7 +132,8 @@ const useProvideAuth = () => {
   const logout = (): void => {
     setToken('');
     setUser(null);
-    router.push('/');
+    // to support logging out from all windows
+    window.localStorage.setItem('logout', JSON.stringify(Date.now()));
   }
 
   /**
@@ -154,6 +158,8 @@ const useProvideAuth = () => {
    * @returns void
    */
   const getToken = async () => {
+    if (window.localStorage.getItem('logout')) return null;
+
     let newToken = null;
     if (!token) {
       try {
@@ -173,7 +179,6 @@ const useProvideAuth = () => {
         router.push('/');
       }
     }
-    return;
   }
 
   const fetchUser = async () => {

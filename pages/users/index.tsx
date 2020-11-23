@@ -10,7 +10,7 @@ import AppDrawer from '../../components/Drawer';
 import UserCard from '../../components/UserCard';
 
 export default function Users({ users }) {
-  const { data, error: userErr } = useSWR('/auth/users', Api.fetcher, { initialData: users })
+  const { data, error: userErr } = useSWR('/auth/users', Api.fetcher, { initialData: users });
   return (
     <AppDrawer>
       <FormHelperText error={!!userErr}>{userErr}</FormHelperText>

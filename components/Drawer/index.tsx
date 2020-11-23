@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import {useRouter} from 'next/router';
+import { useState, useEffect} from "react";
+
 import clsx from "clsx";
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
@@ -92,8 +94,28 @@ const AppDrawer = (props) => {
   const [profileOpen, setProfileOpen] = useState(false);
 
   const theme = useTheme();
+  const router = useRouter();
   const classes = useStyles();
   const { user, token, fetchUser, logout, getToken } = useAuthContext();
+
+  useEffect(() => {
+    // called when the storage is changed by a different window
+    window.addEventListener('storage', syncLogout)
+    return () => {
+      window.removeEventListener('storage', syncLogout)
+    };
+  }, []);
+
+  /**
+   * Logouts a user in all logged in browser tabs
+   * @param evt 
+   * @returns void
+   */
+  const syncLogout = evt => {
+    if (evt.key === 'logout') {
+      router.push('/login');
+    }
+  }
 
   useEffect(() => {
     getToken();
