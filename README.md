@@ -1,15 +1,21 @@
 # Postit
-Add your posts, upvote and downvote those you like or dislike. 
+A simple application for you to add posts, upvote and downvote those you like or dislike. 
+Access the deployed application [here](https://postit-rnuide92v.vercel.app/)
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+$ git clone https://github.com/Chris-Maina/Postit.git
+$ cd Postit
+$ yarn install
+$ yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create an `env.local` file similar to `.env`
 
+## Built using
+
+- [Next.js](https://nextjs.org/)
+- [Material UI](https://material-ui.com/)
