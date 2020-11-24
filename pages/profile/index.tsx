@@ -232,7 +232,7 @@ const Profile = () => {
               isProfile={true}
             />
           )) : (
-            <ListItem>
+            <ListItem disableGutters>
               <ListItemText>You have no posts</ListItemText>
             </ListItem>
           )}
