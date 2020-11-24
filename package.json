@@ -8,6 +8,16 @@
     "start": "next start",
     "lint": "eslint '*/**/*.{ts,tsx}' --quiet --fix"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts, tsx}": [
+      "eslint --fix"
+    ]
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
