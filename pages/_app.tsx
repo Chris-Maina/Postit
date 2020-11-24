@@ -1,6 +1,6 @@
 import '../styles/globals.css';
-import Head from "next/head";
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 // import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

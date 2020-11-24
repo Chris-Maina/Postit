@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import useSWR, { mutate } from 'swr';
-import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';

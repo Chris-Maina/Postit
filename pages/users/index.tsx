@@ -1,3 +1,4 @@
+import React from 'react';
 import useSWR from 'swr';
 import { GetStaticProps } from 'next';
 import Grid from '@material-ui/core/Grid';

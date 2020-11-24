@@ -1,3 +1,4 @@
+import React from 'react';
 import { format } from 'date-fns';
 import Avatar from '@material-ui/core/Avatar';
 import EditIcon from '@material-ui/icons/Edit';

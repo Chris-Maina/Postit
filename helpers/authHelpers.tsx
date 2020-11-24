@@ -1,5 +1,5 @@
+import React, { createContext, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import { createContext, useContext, useState } from 'react';
 import Api from './apiHelpers';
 import { IUser } from '../common/interfaces';
 
