@@ -87,6 +87,10 @@ const useProvideAuth = () => {
         first_name,
         last_name,
       });
+
+      if (error) {
+        setError('');
+      }
       router.push('/login');
     } catch (error) {
       setLoading(false);
@@ -117,6 +121,9 @@ const useProvideAuth = () => {
       });
 
       setToken(access_token);
+      if (error) {
+        setError('');
+      }
       router.push('/');
     } catch (error) {
       setLoading(false);
@@ -193,6 +200,9 @@ const useProvideAuth = () => {
         last_name,
         posts: response.data?.posts || []
       });
+      if (error) {
+        setError('');
+      }
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
@@ -221,6 +231,9 @@ const useProvideAuth = () => {
         last_name,
         posts: response.data?.posts || []
       });
+      if (error) {
+        setError('');
+      }
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
