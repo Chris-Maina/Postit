@@ -38,6 +38,7 @@ export default function Users({ users }) {
         ) 
         : (
           <div className={classes.Section}>
+            <h2>Users</h2>
             <Grid container spacing={2}>
               {data.map(user => (
                 <Grid key={user.id} item>
