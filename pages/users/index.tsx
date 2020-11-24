@@ -19,7 +19,7 @@ export default function Users({ users }) {
   if (!data) return (
     <AppDrawer>
       <FormHelperText error={!!userErr}>{userErr}</FormHelperText>
-      <CircularProgress className={classes.loader} />
+      <CircularProgress className={classes.Loader} />
     </AppDrawer>
   );
   return (
@@ -31,19 +31,21 @@ export default function Users({ users }) {
               <ListItem>
                 <ListItemText
                   disableTypography
-                  primary={<Typography className={classes.itemText} variant="h4">Yay <span role='img' aria-label="party popper">🎉</span> Nice to meet you, now register!</Typography>}
+                  primary={<Typography className={classes.ItemText} variant="h4">Yay <span role='img' aria-label="party popper">🎉</span> Nice to meet you, now register!</Typography>}
                 />
             </ListItem>
           </List>
         ) 
         : (
-          <Grid container spacing={2}>
-            {data.map(user => (
-              <Grid key={user.id} item>
-                <UserCard user={user} />
-              </Grid>
-            ))}
-          </Grid>
+          <div className={classes.Section}>
+            <Grid container spacing={2}>
+              {data.map(user => (
+                <Grid key={user.id} item>
+                  <UserCard user={user} />
+                </Grid>
+              ))}
+            </Grid>
+          </div>
         )
       }
     </AppDrawer>
