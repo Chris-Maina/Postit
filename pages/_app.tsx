@@ -1,11 +1,10 @@
 import '../styles/globals.css';
+import React, { useEffect } from 'react';
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 // import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { useEffect } from 'react';
-import Head from 'next/head';
-import { AuthProvider } from '../helpers/authHelpers'
-
+import { AuthProvider } from '../helpers/authHelpers';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -25,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </AuthProvider>
     </>
-  )
+  );
 }
 
 export default MyApp;

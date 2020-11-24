@@ -1,3 +1,4 @@
+import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
@@ -9,11 +10,11 @@ import classes from './LoginDialog.module.scss';
 
 const LoginDialog = ({ open, onClose }) => {
   return (
-    <Dialog 
+    <Dialog
       open={open}
       onClose={onClose}
       classes={{
-        paper: classes.Dialog
+        paper: classes.Dialog,
       }}
     >
       <DialogTitle>
@@ -34,7 +35,7 @@ const LoginDialog = ({ open, onClose }) => {
         <LoginForm isDialog onClose={onClose} />
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
 export default LoginDialog;

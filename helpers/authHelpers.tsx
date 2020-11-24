@@ -1,6 +1,6 @@
-import {useRouter} from 'next/router';
-import { createContext, useContext, useState } from "react";
-import Api from "./apiHelpers";
+import React, { createContext, useContext, useState } from 'react';
+import { useRouter } from 'next/router';
+import Api from './apiHelpers';
 import { IUser } from '../common/interfaces';
 
 /**
@@ -13,37 +13,36 @@ export const getExpirationDate = (jwtToken: string): number => {
 
   const jwt = JSON.parse(atob(jwtToken.split('.')[1]));
   // multiply by 1000 to convert seconds into milliseconds
-  return jwt && jwt.exp && jwt.exp * 1000 || null
-}
+  return (jwt && jwt.exp && jwt.exp * 1000) || null;
+};
 
 /**
- * 
- * @param {number} expDate 
+ *
+ * @param {number} expDate
  * @returns {boolean}
  */
 export const isExpired = (expDate: any): boolean => {
   if (!expDate) return false;
   return Date.now() > expDate;
-}
-
+};
 
 interface IUserPayload extends IUser {
-  password: string,
-  confirmPassword?: string,
+  password: string;
+  confirmPassword?: string;
 }
 
 interface IAuthContext {
-  user: IUser,
-  loading: boolean,
-  error: string,
-  token: string,
-  getToken?: () => any,
-  isLoggedIn?: () => boolean,
-  register?: (data: IUserPayload) => void,
-  login?: (data: IUserPayload) => void,
-  fetchUser?: () => void,
-  logout?: () => void,
-  updateUser?: (user:IUser) => void,
+  user: IUser;
+  loading: boolean;
+  error: string;
+  token: string;
+  getToken?: () => any;
+  isLoggedIn?: () => boolean;
+  register?: (data: IUserPayload) => void;
+  login?: (data: IUserPayload) => void;
+  fetchUser?: () => void;
+  logout?: () => void;
+  updateUser?: (user: IUser) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -52,19 +51,19 @@ const AuthContext = createContext<IAuthContext>({
   },
   loading: false,
   error: '',
-  token: ''
+  token: '',
 });
 
 // Hook to access AuthContext
 export const useAuthContext = () => {
   return useContext(AuthContext);
-}
+};
 
 // Component wrapper to share auth value
 export const AuthProvider = ({ children }) => {
   const auth = useProvideAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-}
+};
 
 const useProvideAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -74,13 +73,13 @@ const useProvideAuth = () => {
 
   const router = useRouter();
 
-  const register = async payload => {
+  const register = async (payload) => {
     try {
       setLoading(true);
       const response = await Api.register(payload);
       setLoading(false);
 
-      const  { first_name, last_name, email, id} = response.data;
+      const { first_name, last_name, email, id } = response.data;
       setUser({
         id,
         email,
@@ -94,16 +93,16 @@ const useProvideAuth = () => {
       router.push('/login');
     } catch (error) {
       setLoading(false);
-      
+
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
       } else {
         setError('Could not complete registration. Try again');
       }
     }
-  }
+  };
 
-  const login = async payload => {
+  const login = async (payload) => {
     try {
       setLoading(true);
       const response = await Api.login(payload);
@@ -111,8 +110,8 @@ const useProvideAuth = () => {
       // Remove item from local storage
       window.localStorage.removeItem('logout');
       setLoading(false);
-      const  { first_name, last_name, email, id, access_token } = response.data;
-      
+      const { first_name, last_name, email, id, access_token } = response.data;
+
       setUser({
         id,
         email,
@@ -127,30 +126,29 @@ const useProvideAuth = () => {
       router.push('/');
     } catch (error) {
       setLoading(false);
-      
+
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
       } else {
         setError('Could not complete login. Try again');
       }
     }
-  }
+  };
 
   const logout = (): void => {
     setToken('');
     setUser(null);
     // to support logging out from all windows
     window.localStorage.setItem('logout', JSON.stringify(Date.now()));
-  }
+  };
 
   /**
    * Check if there is a token
    * @returns {boolean}
    */
-  const isLoggedIn = ():boolean => !!token;
+  const isLoggedIn = (): boolean => !!token;
 
-
-  const getUserId = (): any=> {
+  const getUserId = (): any => {
     if (user && user.id) return user.id;
     if (token) {
       const mid = token.split('.')[1];
@@ -158,7 +156,7 @@ const useProvideAuth = () => {
       return decodedToken.id;
     }
     return null;
-  }
+  };
 
   /**
    * Refreshes token
@@ -176,7 +174,7 @@ const useProvideAuth = () => {
       } catch (error) {
         console.log(error);
       }
-    } 
+    }
     const expDate = getExpirationDate(token);
     if (isExpired(expDate)) {
       try {
@@ -186,19 +184,19 @@ const useProvideAuth = () => {
         console.log(error);
       }
     }
-  }
+  };
 
   const fetchUser = async () => {
     try {
       const userId = getUserId();
       const response = await Api.fetchUser({ userId, token });
-      const  { first_name, last_name, email, id } = response.data;
+      const { first_name, last_name, email, id } = response.data;
       setUser({
         id,
         email,
         first_name,
         last_name,
-        posts: response.data?.posts || []
+        posts: response.data?.posts || [],
       });
       if (error) {
         setError('');
@@ -210,7 +208,7 @@ const useProvideAuth = () => {
         setError('Could not fetch user. Try again');
       }
     }
-  }
+  };
 
   const updateUser = async (data) => {
     try {
@@ -223,13 +221,13 @@ const useProvideAuth = () => {
         id: userId,
         token,
       });
-      const  { first_name, last_name, email, id } = response.data;
+      const { first_name, last_name, email, id } = response.data;
       setUser({
         id,
         email,
         first_name,
         last_name,
-        posts: response.data?.posts || []
+        posts: response.data?.posts || [],
       });
       if (error) {
         setError('');
@@ -241,7 +239,7 @@ const useProvideAuth = () => {
         setError('Could not update user. Try again');
       }
     }
-  }
+  };
 
   return {
     user,
@@ -255,5 +253,5 @@ const useProvideAuth = () => {
     fetchUser,
     isLoggedIn,
     updateUser,
-  }
-}
+  };
+};

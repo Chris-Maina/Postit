@@ -11,7 +11,7 @@ const Register = () => {
   return (
     <div className={classes.Register}>
       <Paper className={classes.Register_Wrapper}>
-        <Typography 
+        <Typography
           variant="h4"
           color="textPrimary"
           className={classes.Register_Title}
@@ -19,15 +19,15 @@ const Register = () => {
           Postit
         </Typography>
         <RegisterForm />
-        <Typography 
-          color="textPrimary"
-          className={classes.Register_Caption}
-        >
-          Already have an account? <Link href="/login"><a color="primary">Login</a></Link>
+        <Typography color="textPrimary" className={classes.Register_Caption}>
+          Already have an account?{' '}
+          <Link href="/login">
+            <a color="primary">Login</a>
+          </Link>
         </Typography>
       </Paper>
     </div>
   );
-}
+};
 
 export default Register;
