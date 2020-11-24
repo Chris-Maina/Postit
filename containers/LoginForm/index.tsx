@@ -7,35 +7,39 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { useAuthContext } from '../../helpers/authHelpers';
 import classes from '../RegisterForm/RegisterForm.module.scss';
-import { validateReguired, validateEmail, validateMinLength } from '../../helpers/formUtils';
+import {
+  validateReguired,
+  validateEmail,
+  validateMinLength,
+} from '../../helpers/formUtils';
 
 interface IFormData {
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }
 interface IErrors {
-  email?: string,
-  password?: string
+  email?: string;
+  password?: string;
 }
 
 interface ILoginForm {
-  isDialog?: boolean,
-  onClose?: () => void,
+  isDialog?: boolean;
+  onClose?: () => void;
 }
 
 const LoginForm = (props: ILoginForm) => {
   const initialState = {
     email: '',
-    password: ''
-  }
+    password: '',
+  };
   const [errors, setErrors] = useState<IErrors>({});
   const [formData, setFormData] = useState<IFormData>(initialState);
-  const { loading, error, login } = useAuthContext()
+  const { loading, error, login } = useAuthContext();
 
   const validate = () => {
     const errors = {};
     const fields = ['email', 'password'];
-    fields.forEach(field => {
+    fields.forEach((field) => {
       let error = validateReguired(formData[field]);
       if (error) {
         errors[field] = error;
@@ -54,23 +58,23 @@ const LoginForm = (props: ILoginForm) => {
           errors[field] = error;
         }
       }
-    })
+    });
 
     return errors;
-  }
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value, name } = event.target;
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
-    }))
-    setErrors(prevData => ({
+      [name]: value,
+    }));
+    setErrors((prevData) => ({
       ...prevData,
-      [name]: ''
-    }))
-  } 
+      [name]: '',
+    }));
+  };
 
   const onSubmit = (evt: React.FormEvent) => {
     evt.preventDefault();
@@ -82,8 +86,7 @@ const LoginForm = (props: ILoginForm) => {
       login(formData);
       props.isDialog && props.onClose();
     }
-
-  }
+  };
 
   return (
     <form onSubmit={onSubmit} className={classes.Form}>
@@ -91,19 +94,39 @@ const LoginForm = (props: ILoginForm) => {
 
       <FormControl margin="dense" className={classes.Form_Control}>
         <label>Email</label>
-        <OutlinedInput onChange={onChange} type="email" name="email" value={formData.email} required />
+        <OutlinedInput
+          onChange={onChange}
+          type="email"
+          name="email"
+          value={formData.email}
+          required
+        />
         <FormHelperText error={!!errors.email}>{errors.email}</FormHelperText>
       </FormControl>
       <FormControl margin="dense" className={classes.Form_Control}>
         <label>Password</label>
-        <OutlinedInput onChange={onChange} type="password" name="password" value={formData.password} required />
-        <FormHelperText error={!!errors.password}>{errors.password}</FormHelperText>
+        <OutlinedInput
+          onChange={onChange}
+          type="password"
+          name="password"
+          value={formData.password}
+          required
+        />
+        <FormHelperText error={!!errors.password}>
+          {errors.password}
+        </FormHelperText>
       </FormControl>
       <div className={classes.Form_Button}>
-        {loading ? <CircularProgress /> : <Button type="submit" variant="contained"  color="primary" fullWidth>Login</Button>}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Login
+          </Button>
+        )}
       </div>
     </form>
-  )
-}
+  );
+};
 
 export default LoginForm;

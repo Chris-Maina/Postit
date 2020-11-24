@@ -1,32 +1,30 @@
-import { mutate } from "swr";
-import { useEffect, useState } from "react";
-import Button from "@material-ui/core/Button";
+import { mutate } from 'swr';
+import { useEffect, useState } from 'react';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import InputBase from "@material-ui/core/InputBase";
+import InputBase from '@material-ui/core/InputBase';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 import Api from '../../helpers/apiHelpers';
 import classes from './PostForm.module.scss';
-import { useAuthContext } from "../../helpers/authHelpers";
-
+import { useAuthContext } from '../../helpers/authHelpers';
 
 const PostForm = ({ post, onCancel, openLoginDialog }) => {
-
-  const {isLoggedIn, token} = useAuthContext();
-  const [error, setError] = useState("");
-  const [title, setTitle] = useState("");
+  const { isLoggedIn, token } = useAuthContext();
+  const [error, setError] = useState('');
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     if (Object.keys(post).length) {
-      setTitle(post.title)
+      setTitle(post.title);
     }
-  }, [post])
+  }, [post]);
 
   const onChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target;
 
     setTitle(value);
-  }
+  };
 
   const onSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
@@ -40,7 +38,7 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
       } else {
         await Api.addPost({ title, token });
       }
-      onCancelClick()
+      onCancelClick();
 
       // Revalidate posts
       mutate('/posts');
@@ -51,20 +49,19 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
         setError('Could not add your post. Try again');
       }
     }
-  }
+  };
 
   const onCancelClick = () => {
-    setTitle("");
-    setError("");
+    setTitle('');
+    setError('');
     onCancel();
-  }
-
+  };
 
   return (
     <form className={classes.Form} onSubmit={onSubmit}>
       <FormControl fullWidth>
         <FormHelperText error={!!error}>{error}</FormHelperText>
-        <InputBase 
+        <InputBase
           required
           multiline
           autoFocus
@@ -76,16 +73,16 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
         />
       </FormControl>
       <div className={classes.Form_Button_Wrapper}>
-        <Button 
+        <Button
           type="submit"
           color="primary"
           variant="contained"
           className={classes.Form_Button}
           classes={{
-            root: classes.Form_Button_Root
+            root: classes.Form_Button_Root,
           }}
         >
-          {Object.keys(post).length? 'Edit post' : 'Add post'}
+          {Object.keys(post).length ? 'Edit post' : 'Add post'}
         </Button>
         {Object.keys(post).length ? (
           <Button
@@ -94,15 +91,15 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
             color="secondary"
             onClick={onCancelClick}
             classes={{
-              root: classes.Form_Button_Root
+              root: classes.Form_Button_Root,
             }}
           >
             Cancel
           </Button>
-        ): null}
+        ) : null}
       </div>
     </form>
-  )
-}
+  );
+};
 
 export default PostForm;

@@ -9,11 +9,11 @@ import classes from './LoginDialog.module.scss';
 
 const LoginDialog = ({ open, onClose }) => {
   return (
-    <Dialog 
+    <Dialog
       open={open}
       onClose={onClose}
       classes={{
-        paper: classes.Dialog
+        paper: classes.Dialog,
       }}
     >
       <DialogTitle>
@@ -34,7 +34,7 @@ const LoginDialog = ({ open, onClose }) => {
         <LoginForm isDialog onClose={onClose} />
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
 export default LoginDialog;

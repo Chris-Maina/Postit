@@ -18,15 +18,15 @@ const Register = () => {
           Postit
         </Typography>
         <LoginForm />
-        <Typography 
-          color="textPrimary"
-          className={classes.Register_Caption}
-        >
-          Do not have an account? <Link href="/register"><a color="primary">Register</a></Link>
+        <Typography color="textPrimary" className={classes.Register_Caption}>
+          Do not have an account?{' '}
+          <Link href="/register">
+            <a color="primary">Register</a>
+          </Link>
         </Typography>
       </Paper>
     </div>
   );
-}
+};
 
 export default Register;
