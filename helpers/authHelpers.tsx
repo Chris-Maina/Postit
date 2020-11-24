@@ -167,7 +167,7 @@ const useProvideAuth = () => {
         setToken(newToken.data.access_token);
         return;
       } catch (error) {
-        router.push('/');
+        console.log(error);
       }
     } 
     const expDate = getExpirationDate(token);
@@ -176,7 +176,7 @@ const useProvideAuth = () => {
         newToken = await Api.getAccessRefreshToken();
         setToken(newToken.data.access_token);
       } catch (error) {
-        router.push('/');
+        console.log(error);
       }
     }
   }

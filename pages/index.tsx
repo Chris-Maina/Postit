@@ -1,12 +1,16 @@
 import useSWR, { mutate } from 'swr';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import List from '@material-ui/core/List';
+import ListItem from "@material-ui/core/ListItem";
 import LoginDialog from '../components/LoginDialog';
+import Typography from '@material-ui/core/Typography';
+import ListItemText from "@material-ui/core/ListItemText";
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Api from '../helpers/apiHelpers';
+import classes from './Index.module.scss';
 import AppDrawer from '../components/Drawer';
 import PostForm from '../containers/PostForm';
 import PostCard from '../components/PostCard';
@@ -31,9 +35,13 @@ export default function Home({ posts }) {
     setPost({});
   }
 
+  const openLoginDialog = () => {
+    setOpen(true);
+  }
+
   const onDeleteClick = postId => {
     if (!isLoggedIn()) {
-      setOpen(true)
+      setOpen(true);
     } else {
       try {
         Api.deletePost({ postId, token });
@@ -74,12 +82,29 @@ export default function Home({ posts }) {
     }
   }
 
+  if (!data) return (
+    <AppDrawer>
+      <FormHelperText error={!!error || !!postsErr}>{error || postsErr}</FormHelperText>
+      <PostForm post={post} onCancel={onCancelClick} openLoginDialog={openLoginDialog} />
+      <CircularProgress className={classes.loader} />
+    </AppDrawer>
+  );
+
   return (
     <AppDrawer>
       <FormHelperText error={!!error || !!postsErr}>{error || postsErr}</FormHelperText>
-      <PostForm post={post} onCancel={onCancelClick} />
-      {!data 
-        ? (<CircularProgress />) 
+      <PostForm post={post} onCancel={onCancelClick} openLoginDialog={openLoginDialog} />
+      {(data && !data.length) 
+        ? (
+          <List>
+             <ListItem>
+              <ListItemText
+                disableTypography
+                primary={<Typography variant="h4">There are no posts currently. <span role='img' aria-label="writing hand">✍️</span> it!</Typography>}
+              />
+            </ListItem>
+          </List>
+        ) 
         : (
           <List>
             {data?.map(post => (
