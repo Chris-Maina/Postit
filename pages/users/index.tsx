@@ -9,8 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Api from '../../helpers/apiHelpers';
 import classes from './Users.module.scss';
+import Api from '../../helpers/apiHelpers';
 import AppDrawer from '../../components/Drawer';
 import UserCard from '../../components/UserCard';
 
