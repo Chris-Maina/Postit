@@ -140,6 +140,7 @@ const useProvideAuth = () => {
     setUser(null);
     // to support logging out from all windows
     window.localStorage.setItem('logout', JSON.stringify(Date.now()));
+    router.push('/');
   };
 
   /**
