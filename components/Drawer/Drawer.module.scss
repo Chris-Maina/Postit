@@ -1,0 +1,53 @@
+.Root {
+  display: flex;
+}
+.AppBar {
+  transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms, width cubic-bezier(0.4, 0, 0.6, 1) 195ms;
+}
+.AppBarShift {
+  width: calc(100% - 240px);
+  margin-left: 240px;
+  transition: margin cubic-bezier(0.0, 0, 0.2, 1) 225ms, width cubic-bezier(0.0, 0, 0.2, 1) 225ms;
+}
+.MenuButton {
+  margin-right: 16px;
+}
+.Hide {
+  display: none;
+}
+.Drawer {
+  width: 240px;
+  flex-shrink: 0;
+}
+.DrawerPaper {
+  width: 240px;
+}
+.DrawerHeader {
+  display: flex;
+  align-items: center;
+  padding: 0px 8px;
+  min-height: 56px;
+  justify-content: flex-end;
+  @media (min-width: 0px) and (orientation: landscape){
+    min-height: 48px;
+  }
+  @media (min-width: 600px) {
+    min-height: 64px;
+  }
+}
+.Content {
+  flex-grow: 1;
+  width: 100%;
+  padding: 24px 0px;
+  margin-left: -240px;
+  transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms;
+}
+.ContentShift {
+  margin-left: 0px;
+  transition: margin cubic-bezier(0.0, 0, 0.2, 1) 225ms;
+}
+.BottomNav {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
