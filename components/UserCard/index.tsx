@@ -30,7 +30,7 @@ const UserCard = ({ user }: IUserCard) => {
               variant="caption"
               color="textSecondary"
             >
-              {user.posts.length} posts added
+              {user.posts.length} posts added.
             </Typography>
           </div>
         </Grid>
