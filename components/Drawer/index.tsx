@@ -53,7 +53,7 @@ const AppDrawer = (props) => {
 
   useEffect(() => {
     getToken();
-    if (token && !user) {
+    if (token && (!user || !user.posts)) {
       fetchUser();
     }
   }, [token, user]);

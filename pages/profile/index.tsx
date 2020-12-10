@@ -149,7 +149,11 @@ const Profile = () => {
   };
 
   if (!user || !Object.values(user).length) {
-    return <CircularProgress />;
+    return (
+      <AppDrawer>
+        <CircularProgress className={classes.loader} />
+      </AppDrawer>
+    );
   }
 
   return (
