@@ -95,6 +95,13 @@ const AppDrawer = (props) => {
         }}
       >
         <div className={classes.DrawerHeader}>
+          <Typography 
+            noWrap
+            variant="h6"
+            className={classes.DrawerHeader_Logo}
+          >
+            Postit
+          </Typography>
           <IconButton onClick={() => setOpen(false)}>
             {theme.direction === 'ltr' ? (
               <ChevronLeftIcon />

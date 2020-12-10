@@ -27,7 +27,13 @@
   align-items: center;
   padding: 0px 8px;
   min-height: 56px;
-  justify-content: flex-end;
+  justify-content: space-between;
+
+  &_Logo {
+    padding-left: 8px;
+    font-weight: 600 !important;
+  }
+
   @media (min-width: 0px) and (orientation: landscape){
     min-height: 48px;
   }
