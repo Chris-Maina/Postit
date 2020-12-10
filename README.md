@@ -1,6 +1,6 @@
 # Postit
 A simple application for you to add posts, upvote and downvote those you like or dislike. 
-Access the deployed application [here](https://postit-rnuide92v.vercel.app/)
+Access the deployed application [here](https://postit.chris-maina.vercel.app)
 
 ## Getting Started
 
