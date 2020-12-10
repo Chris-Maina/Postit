@@ -1,5 +1,3 @@
-$drawerWidth: 240px;
-
 .Root {
   display: flex;
 }
@@ -7,8 +5,8 @@ $drawerWidth: 240px;
   transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms, width cubic-bezier(0.4, 0, 0.6, 1) 195ms;
 }
 .AppBarShift {
-  width: calc(100% - $drawerWidth);
-  margin-left: $drawerWidth;
+  width: calc(100% - 240px);
+  margin-left: 240px;
   transition: margin cubic-bezier(0.0, 0, 0.2, 1) 225ms, width cubic-bezier(0.0, 0, 0.2, 1) 225ms;
 }
 .MenuButton {
@@ -18,11 +16,11 @@ $drawerWidth: 240px;
   display: none;
 }
 .Drawer {
-  width: $drawerWidth;
+  width: 240px;
   flex-shrink: 0;
 }
 .DrawerPaper {
-  width: $drawerWidth;
+  width: 240px;
 }
 .DrawerHeader {
   display: flex;
@@ -41,7 +39,7 @@ $drawerWidth: 240px;
   flex-grow: 1;
   width: 100%;
   padding: 24px 0px;
-  margin-left: -$drawerWidth;
+  margin-left: -240px;
   transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms;
 }
 .ContentShift {
