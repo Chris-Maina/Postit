@@ -1,0 +1,22 @@
+@import '../../styles/mixins.scss';
+
+.Form {
+  @include Form;
+
+  &_Control {
+    @include FormControl;
+    margin-bottom: 20px !important;
+  }
+  &_Actions {
+    display: flex;
+    justify-content: space-between;
+
+    button:first-child {
+      margin-right: 8px
+    }
+  }
+
+  &_Button {
+    @include FormButton;
+  }
+}
