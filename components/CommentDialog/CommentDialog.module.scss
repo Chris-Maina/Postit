@@ -1,0 +1,9 @@
+@import '../../styles/mixins.scss';
+
+.Dialog {
+  @include Dialog;
+
+  &_Title {
+    text-align: left;
+  }
+}
