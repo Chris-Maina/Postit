@@ -17,7 +17,7 @@ const LoginDialog = ({ open, onClose }) => {
         paper: classes.Dialog,
       }}
     >
-      <DialogTitle>
+      <DialogTitle disableTypography>
         <Typography
           variant="h4"
           color="textPrimary"
