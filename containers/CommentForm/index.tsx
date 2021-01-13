@@ -11,18 +11,21 @@ import classes from './CommentForm.module.scss';
 import { IPost, IComment } from '../../common/interfaces';
 
 interface CommentFormProps {
-  post: IPost,
-  commentProp?: IComment,
-  onCancel: () => void,
+  post: IPost;
+  editMode?: boolean;
+  commentProp?: IComment;
+  onCancel: () => void;
 }
-const CommentForm = ({ post, onCancel, commentProp }: CommentFormProps) => {
+const CommentForm = ({ post, onCancel, commentProp, editMode }: CommentFormProps) => {
   const { token } = useAuthContext()
   const [error, setError] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   
   useEffect(() => {
-    if (Object.keys(commentProp).length) {
+    if (editMode && Object.keys(commentProp).length) {
       setComment(commentProp.title);
+    } else {
+      setComment('');
     }
   }, [commentProp]);
 
@@ -36,8 +39,8 @@ const CommentForm = ({ post, onCancel, commentProp }: CommentFormProps) => {
     evt.preventDefault();
 
     try {
-      if (Object.keys(commentProp).length) {
-        await Api.updateComment({ ...commentProp, title: comment });
+      if (editMode && Object.keys(commentProp).length) {
+        await Api.updateComment({ id: commentProp.id, title: comment, token });
       } else {
         await Api.addComment({ title: comment, post_id: post.id, token });
       }
@@ -90,7 +93,7 @@ const CommentForm = ({ post, onCancel, commentProp }: CommentFormProps) => {
           variant="contained"
           className={classes.Form_Button}
         >
-          Add
+          {editMode ? 'Edit': 'Add'}
         </Button>
       </div>
     </form>

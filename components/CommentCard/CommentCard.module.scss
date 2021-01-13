@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .Comment {
   &_Avatar {
     width: 28px !important;
@@ -6,5 +8,10 @@
   &_User {
     font-weight: bold !important;
     margin-right: 8px !important;
+  }
+  &_SpeedDialFab {
+    width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
   }
 }

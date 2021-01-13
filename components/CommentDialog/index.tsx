@@ -1,20 +1,26 @@
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import CommentForm from '../../containers/CommentForm';
-
 import classes from './CommentDialog.module.scss';
 
 interface CommentDialogProps {
-  post: any,
-  open: boolean,
-  onClose: () => void,
+  post: any;
+  open: boolean;
+  comment: any;
+  editCommentMode: boolean;
+  onClose: () => void;
 }
-const CommentDialog = ({ post, open, onClose }: CommentDialogProps) => {
+const CommentDialog = ({
+  post,
+  open,
+  onClose,
+  comment,
+  editCommentMode
+}: CommentDialogProps) => {
   return (
     <Dialog 
       open={open}
@@ -30,18 +36,25 @@ const CommentDialog = ({ post, open, onClose }: CommentDialogProps) => {
           color="textPrimary"
           className={classes.Dialog_Title}
         >
-          Add Comment
+          {editCommentMode ? 'Edit': 'Add'} Comment
         </Typography>
-        <Typography
-          variant="subtitle1"
-          color="textSecondary"
-          className={classes.Dialog_Subtitle}
-        >
-          on <span>{post.title}</span>
-        </Typography>
+        {post?.title ? (
+          <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            className={classes.Dialog_Subtitle}
+          >
+            on <span>{post.title}</span>
+          </Typography>
+        ): null}
       </DialogTitle>
       <DialogContent>
-        <CommentForm post={post} onCancel={onClose} />
+        <CommentForm
+          post={post}
+          commentProp={comment}
+          editMode={editCommentMode}
+          onCancel={onClose}
+        />
       </DialogContent>
     </Dialog>
   )

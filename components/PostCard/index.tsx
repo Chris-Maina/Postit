@@ -26,7 +26,7 @@ import {
   getUserFullname,
 } from '../../helpers/postHelpers';
 import CommentCard from '../CommentCard';
-import { IPost, IUser } from '../../common/interfaces';
+import { IComment, IPost, IUser } from '../../common/interfaces';
 interface IPostCard {
   post: IPost;
   user: IUser;
@@ -34,6 +34,8 @@ interface IPostCard {
   onVote?: (postId: number, vote_type: string) => void;
   onDelete?: (post: IPost) => void;
   onComment?: (post: IPost) => void;
+  onEditComment?: (comment: IComment) => void;
+  onDeleteComment?: (comment: IComment) => void;
   isProfile?: boolean;
 }
 
@@ -45,6 +47,8 @@ const PostCard = ({
   onDelete,
   onComment,
   isProfile,
+  onEditComment,
+  onDeleteComment,
 }: IPostCard) => {
 
   const [viewComments, setViewComments] = useState<boolean>(false);
@@ -136,6 +140,8 @@ const PostCard = ({
                   key={comment.id}
                   comment={comment}
                   variant="body2"
+                  onEdit={onEditComment}
+                  onDelete={onDeleteComment}
                   className={classes.Item_Comment}
                 />
               ))}
