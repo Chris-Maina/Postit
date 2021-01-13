@@ -44,7 +44,11 @@ const getPost = (postId) => {
 
 const deletePost = async ({ postId, token }) => {
   addTokenToHeaders(token);
-  return axiosInstance.delete(`/posts/${postId}`);
+
+  return axiosInstance({
+    method: 'DELETE',
+    url: `/posts/${postId}`
+  });
 };
 
 const fetchUser = async ({ userId, token }) => {
@@ -92,8 +96,11 @@ const updateComment = (data) => {
 
 const deleteComment = (data) => {
   addTokenToHeaders(data.token);
-  delete data.token;
-  return axiosInstance.delete(`/comments/${data.id}`);
+  
+  return axiosInstance({
+    method: 'DELETE',
+    url: `/comments/${data.id}`
+  });
 }
 
 const fetcher = (url) => axiosInstance.get(url).then((res) => res.data);

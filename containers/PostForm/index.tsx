@@ -75,17 +75,6 @@ const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
         />
       </FormControl>
       <div className={classes.Form_Button_Wrapper}>
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          className={classes.Form_Button}
-          classes={{
-            root: classes.Form_Button_Root,
-          }}
-        >
-          {(editMode && Object.keys(post).length) ? 'Edit post' : 'Add post'}
-        </Button>
         {(editMode && Object.keys(post).length) ? (
           <Button
             type="button"
@@ -99,6 +88,17 @@ const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
             Cancel
           </Button>
         ) : null}
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          className={classes.Form_Button}
+          classes={{
+            root: classes.Form_Button_Root,
+          }}
+        >
+          {(editMode && Object.keys(post).length) ? 'Edit post' : 'Add post'}
+        </Button>
       </div>
     </form>
   );
