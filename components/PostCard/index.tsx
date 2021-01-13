@@ -101,7 +101,7 @@ const PostCard = ({
                   )}
                 </IconButton>
               </div>
-              {post?.comments.length ? (
+              {post?.comments?.length ? (
                 <div className={classes.Item_Comments} onClick={() => setViewComments(!viewComments)}>
                   View comments
                 </div>
@@ -129,7 +129,7 @@ const PostCard = ({
       </ListItem>
       <Collapse in={viewComments} timeout="auto" unmountOnExit>
         {
-          post?.comments.length ? (
+          post?.comments?.length ? (
             <List dense component="div" disablePadding>
               {post.comments.map(comment => (
                 <CommentCard
