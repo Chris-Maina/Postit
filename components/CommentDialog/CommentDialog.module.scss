@@ -1,0 +1,19 @@
+@import '../../styles/mixins.scss';
+
+.Dialog {
+  @include Dialog;
+
+  &_Title {
+    text-align: left;
+  }
+  &_Subtitle {
+    width: rem(300px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    span {
+      font-style: oblique;
+    }
+  }
+}

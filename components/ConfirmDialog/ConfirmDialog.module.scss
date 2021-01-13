@@ -1,0 +1,15 @@
+.Dialog {
+  position: relative;
+  padding: 10px;
+
+  &_Title {
+    text-align: left;
+  }
+
+  &_CloseBtn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+  }
+}

@@ -7,4 +7,10 @@
   &_Votes {
     margin: 0 8px;
   }
+  &_Comments {
+    cursor: pointer;
+  }
+  &_Comment {
+    padding-left: 4.5rem !important;
+  }
 }

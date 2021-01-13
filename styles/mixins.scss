@@ -1,0 +1,35 @@
+@mixin Dialog {
+  position: relative;
+  padding: 10px;
+}
+
+@mixin DialogCloseBtn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+@mixin Form {
+  max-width: 700px;
+  margin: auto;
+}
+
+@mixin FormControl {
+  width: 100%;
+  margin-bottom: 8px !important;
+}
+
+@mixin FormButton {
+  width: 100%;
+  margin: 8px 0px;
+  text-align: center;
+}
+
+@function stripUnit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function rem($pxValue, $standardSize: 16) {
+  @return #{stripUnit($pxValue) / $standardSize}rem;
+}

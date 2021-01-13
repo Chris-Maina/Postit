@@ -9,14 +9,16 @@ import Api from '../../helpers/apiHelpers';
 import classes from './PostForm.module.scss';
 import { useAuthContext } from '../../helpers/authHelpers';
 
-const PostForm = ({ post, onCancel, openLoginDialog }) => {
+const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
   const { isLoggedIn, token } = useAuthContext();
   const [error, setError] = useState('');
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    if (Object.keys(post).length) {
+    if (editMode && Object.keys(post).length) {
       setTitle(post.title);
+    } else {
+      setTitle('');
     }
   }, [post]);
 
@@ -73,18 +75,7 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
         />
       </FormControl>
       <div className={classes.Form_Button_Wrapper}>
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          className={classes.Form_Button}
-          classes={{
-            root: classes.Form_Button_Root,
-          }}
-        >
-          {Object.keys(post).length ? 'Edit post' : 'Add post'}
-        </Button>
-        {Object.keys(post).length ? (
+        {(editMode && Object.keys(post).length) ? (
           <Button
             type="button"
             variant="outlined"
@@ -97,6 +88,17 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
             Cancel
           </Button>
         ) : null}
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          className={classes.Form_Button}
+          classes={{
+            root: classes.Form_Button_Root,
+          }}
+        >
+          {(editMode && Object.keys(post).length) ? 'Edit post' : 'Add post'}
+        </Button>
       </div>
     </form>
   );

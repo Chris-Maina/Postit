@@ -12,4 +12,13 @@ export interface IPost {
   created_at?: string;
   updated_at?: string;
   posted_by?: IUser;
+  comments?: IComment[]
+}
+
+export interface IComment {
+  id?: number;
+  title: string;
+  created_at?: string;
+  updated_at?: string;
+  commented_by?: IUser;
 }

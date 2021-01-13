@@ -44,7 +44,11 @@ const getPost = (postId) => {
 
 const deletePost = async ({ postId, token }) => {
   addTokenToHeaders(token);
-  return axiosInstance.delete(`/posts/${postId}`);
+
+  return axiosInstance({
+    method: 'DELETE',
+    url: `/posts/${postId}`
+  });
 };
 
 const fetchUser = async ({ userId, token }) => {
@@ -78,6 +82,27 @@ const getUsers = () => {
   return axiosInstance.get(`/auth/users`);
 };
 
+const addComment = (data) => {
+  addTokenToHeaders(data.token);
+  delete data.token;
+  return axiosInstance.post('/comments', { ...data });
+};
+
+const updateComment = (data) => {
+  addTokenToHeaders(data.token);
+  delete data.token;
+  return axiosInstance.patch(`/comments/${data.id}`, { ...data });
+};
+
+const deleteComment = (data) => {
+  addTokenToHeaders(data.token);
+  
+  return axiosInstance({
+    method: 'DELETE',
+    url: `/comments/${data.id}`
+  });
+}
+
 const fetcher = (url) => axiosInstance.get(url).then((res) => res.data);
 
 export default {
@@ -93,6 +118,9 @@ export default {
   deletePost,
   updatePost,
   updateUser,
+  addComment,
   resetPassord,
+  updateComment,
+  deleteComment,
   getAccessRefreshToken,
 };
