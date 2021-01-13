@@ -9,14 +9,16 @@ import Api from '../../helpers/apiHelpers';
 import classes from './PostForm.module.scss';
 import { useAuthContext } from '../../helpers/authHelpers';
 
-const PostForm = ({ post, onCancel, openLoginDialog }) => {
+const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
   const { isLoggedIn, token } = useAuthContext();
   const [error, setError] = useState('');
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    if (Object.keys(post).length) {
+    if (editMode && Object.keys(post).length) {
       setTitle(post.title);
+    } else {
+      setTitle('');
     }
   }, [post]);
 
@@ -82,9 +84,9 @@ const PostForm = ({ post, onCancel, openLoginDialog }) => {
             root: classes.Form_Button_Root,
           }}
         >
-          {Object.keys(post).length ? 'Edit post' : 'Add post'}
+          {(editMode && Object.keys(post).length) ? 'Edit post' : 'Add post'}
         </Button>
-        {Object.keys(post).length ? (
+        {(editMode && Object.keys(post).length) ? (
           <Button
             type="button"
             variant="outlined"

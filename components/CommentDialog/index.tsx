@@ -32,6 +32,13 @@ const CommentDialog = ({ post, open, onClose }: CommentDialogProps) => {
         >
           Add Comment
         </Typography>
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          className={classes.Dialog_Subtitle}
+        >
+          on <span>{post.title}</span>
+        </Typography>
       </DialogTitle>
       <DialogContent>
         <CommentForm post={post} onCancel={onClose} />

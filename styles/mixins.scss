@@ -25,3 +25,11 @@
   margin: 8px 0px;
   text-align: center;
 }
+
+@function stripUnit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function rem($pxValue, $standardSize: 16) {
+  @return #{stripUnit($pxValue) / $standardSize}rem;
+}

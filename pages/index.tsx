@@ -23,6 +23,7 @@ export default function Home({ posts }) {
   const [post, setPost] = useState <{[x: string]: any}>({});
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
   const { data, error: postsErr } = useSWR('/posts', Api.fetcher, {
@@ -34,11 +35,13 @@ export default function Home({ posts }) {
       setOpen(true);
     } else {
       setPost(post);
+      setEditMode(true);
     }
   };
 
   const onCancelClick = () => {
     setPost({});
+    editMode && setEditMode(false);
   };
 
   const openLoginDialog = () => {
@@ -77,6 +80,8 @@ export default function Home({ posts }) {
     if (!isLoggedIn()) {
       setOpen(true);
     } else {
+      // Set edit mode to false if it is active
+      editMode && setEditMode(false);
       setIsConfirmOpen(true);
       setPost(post);
     }
@@ -107,6 +112,8 @@ export default function Home({ posts }) {
     if (!isLoggedIn()) {
       setOpen(true);
     } else {
+      // Set edit mode to false if it is active
+      editMode && setEditMode(false);
       setIsCommentOpen(true);
       setPost(post);
     }
@@ -125,6 +132,7 @@ export default function Home({ posts }) {
         </FormHelperText>
         <PostForm
           post={post}
+          editMode={editMode}
           onCancel={onCancelClick}
           openLoginDialog={openLoginDialog}
         />
@@ -139,6 +147,7 @@ export default function Home({ posts }) {
       </FormHelperText>
       <PostForm
         post={post}
+        editMode={editMode}
         onCancel={onCancelClick}
         openLoginDialog={openLoginDialog}
       />

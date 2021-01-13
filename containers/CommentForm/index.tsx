@@ -46,7 +46,6 @@ const CommentForm = ({ post, onCancel, commentProp }: CommentFormProps) => {
       // Revalidate posts
       mutate('/posts');
     } catch (error) {
-      console.log('error', error);
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
       } else {
