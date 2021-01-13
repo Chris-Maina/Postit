@@ -24,6 +24,8 @@ export default function Home({ posts }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [comment, setComment] = useState<{ [x: string]: any }>({});
+  const [editCommentMode, setEditCommentMode] = useState<boolean>(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
   const { data, error: postsErr } = useSWR('/posts', Api.fetcher, {
@@ -121,7 +123,63 @@ export default function Home({ posts }) {
 
   const onCommentClose = () => {
     setIsCommentOpen(false);
-    setPost({});
+    setComment({});
+    editCommentMode && setEditCommentMode(false);
+  }
+
+  const onEditComment = comment => {
+    setEditCommentMode(true);
+    setComment(comment);
+    setIsCommentOpen(true);
+  }
+  const onDeleteComment = comment => {
+    setComment(comment);
+    setIsConfirmOpen(true);
+  }
+
+  const onDeleteCommentSuccess = async () => {
+   try {
+      if (error) {
+        setError('');
+      }
+
+      await Api.deleteComment({ id: comment.id, token });
+      mutate('/posts');
+   } catch (error) {
+     if (error.response && error.response.data.error.message) {
+        setError(error.response.data.error.message);
+      } else {
+        setError('Could not delete your comment');
+      }
+   }
+    onDeleteCommentClose();
+  }
+
+  const onDeleteCommentClose = () => {
+    setComment({});
+    setIsConfirmOpen(false);
+  }
+
+  const onConfirmDialogSuccess = () => {
+    if (Object.keys(comment).length) {
+      onDeleteCommentSuccess();
+    } else {
+      onDeleteSuccess();
+    }
+  }
+
+  const onConfirmDialogClose = () => {
+    if (Object.keys(comment).length) {
+      onDeleteCommentClose();
+    } else {
+      onDeleteClose();
+    }
+  }
+  let confirmDialogTitle = 'Delete post';
+  let confirmDialogContent = post.title;
+  if (isConfirmOpen && Object.keys(comment).length) {
+    confirmDialogTitle = 'Delete comment';
+    confirmDialogContent = comment.title;
   }
 
   if (!data)
@@ -179,6 +237,8 @@ export default function Home({ posts }) {
               onDelete={onDeleteClick}
               onComment={onCommentClick}
               onVote={upvoteOrDownVote}
+              onEditComment={onEditComment}
+              onDeleteComment={onDeleteComment}
             />
           ))}
         </List>
@@ -186,16 +246,18 @@ export default function Home({ posts }) {
       <LoginDialog open={open} onClose={() => setOpen(false)} />
       <ConfirmDialog
         open={isConfirmOpen}
-        title="Delete post"
-        onClose={onDeleteClose}
-        onSuccess={onDeleteSuccess}
+        title={confirmDialogTitle}
+        onClose={onConfirmDialogClose}
+        onSuccess={onConfirmDialogSuccess}
       >
-        <div>You are about to delete the post <span className={classes.postTitle}>{post.title}</span></div>
+        <div>You are about to delete <span className={classes.postTitle}>{confirmDialogContent}</span></div>
       </ConfirmDialog>
       <CommentDialog
         post={post}
         open={isCommentOpen}
+        comment={comment}
         onClose={onCommentClose}
+        editCommentMode={editCommentMode}
       />
     </AppDrawer>
   );
