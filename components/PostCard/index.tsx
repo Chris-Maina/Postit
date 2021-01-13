@@ -48,7 +48,7 @@ const PostCard = ({
 }: IPostCard) => {
 
   const [viewComments, setViewComments] = useState<boolean>(false);
-  const postAuthor = post?.posted_by || user;
+  const postAuthor = post?.posted_by;
   const vote = user && Object.values(user).length ? hasVoted(post, user) : null;
   return (
     <>

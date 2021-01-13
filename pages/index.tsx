@@ -104,8 +104,12 @@ export default function Home({ posts }) {
   };
 
   const onCommentClick = (post) => {
-    setIsCommentOpen(true);
-    setPost(post);
+    if (!isLoggedIn()) {
+      setOpen(true);
+    } else {
+      setIsCommentOpen(true);
+      setPost(post);
+    }
   }
 
   const onCommentClose = () => {
@@ -182,7 +186,7 @@ export default function Home({ posts }) {
       <CommentDialog
         post={post}
         open={isCommentOpen}
-        onClose={() => setIsCommentOpen(false)}
+        onClose={onCommentClose}
       />
     </AppDrawer>
   );
