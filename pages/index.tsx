@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import { GetStaticProps } from 'next';
 import List from '@material-ui/core/List';
@@ -31,6 +31,13 @@ export default function Home({ posts }) {
   const { data, error: postsErr } = useSWR('/posts', Api.fetcher, {
     initialData: posts,
   });
+
+  useEffect(() => {
+    // Close dialog after successful login
+    if (open && isLoggedIn()) {
+      setOpen(false);
+    }
+  }, [token]);
 
   const onEditClick = (post) => {
     if (!isLoggedIn()) {
