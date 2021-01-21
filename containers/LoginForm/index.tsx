@@ -22,12 +22,7 @@ interface IErrors {
   password?: string;
 }
 
-interface ILoginForm {
-  isDialog?: boolean;
-  onClose?: () => void;
-}
-
-const LoginForm = (props: ILoginForm) => {
+const LoginForm = () => {
   const initialState = {
     email: '',
     password: '',
@@ -84,7 +79,7 @@ const LoginForm = (props: ILoginForm) => {
       setErrors(errors);
     } else {
       login(formData);
-      props.isDialog && props.onClose();
+      // props.isDialog && props.onClose();
     }
   };
 

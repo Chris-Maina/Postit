@@ -14,4 +14,10 @@
     height: 32px !important;
     min-height: 32px !important;
   }
+  &_Action {
+    font-size: small;
+    &_Icon {
+      margin-right: rem(5px);
+    }
+  }
 }

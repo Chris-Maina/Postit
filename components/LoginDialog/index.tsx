@@ -32,7 +32,7 @@ const LoginDialog = ({ open, onClose }) => {
         />
       </DialogTitle>
       <DialogContent>
-        <LoginForm isDialog onClose={onClose} />
+        <LoginForm />
       </DialogContent>
     </Dialog>
   );
