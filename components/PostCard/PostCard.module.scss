@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 .Item {
   &_Author {
     font-weight: 600 !important;
@@ -12,5 +14,11 @@
   }
   &_Comment {
     padding-left: 4.5rem !important;
+  }
+  &_Action {
+    font-size: small;
+    &_Icon {
+      margin-right: rem(5px);
+    }
   }
 }

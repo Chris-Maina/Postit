@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import List from '@material-ui/core/List';
+import Menu from '@material-ui/core/Menu';
 import Avatar from '@material-ui/core/Avatar';
-import EditIcon from '@material-ui/icons/Edit';
 import Divider from '@material-ui/core/Divider';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
-import DeleteIcon from '@material-ui/icons/Delete';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/EditOutlined';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ListItemText from '@material-ui/core/ListItemText';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@material-ui/icons/ThumbDownOutlined';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ChatBubbleOutlinedIcon from '@material-ui/icons/ChatBubbleOutlined';
 
 import classes from './PostCard.module.scss';
 import {
@@ -50,10 +53,45 @@ const PostCard = ({
   onEditComment,
   onDeleteComment,
 }: IPostCard) => {
-
+  const ACTIONS = [
+    {
+      icon: <ChatBubbleOutlineIcon fontSize="small" className={classes.Item_Action_Icon} />,
+      name: 'Comment',
+      onClick: (post) => {
+        onComment(post);
+        handleClose();
+      } 
+    },
+    {
+      icon: <EditIcon fontSize="small" className={classes.Item_Action_Icon} />,
+      name: 'Edit',
+      onClick: (post) => {
+        onEdit(post);
+        handleClose();
+      } 
+    },
+    {
+      icon: <DeleteIcon fontSize="small" className={classes.Item_Action_Icon} />,
+      name: 'Delete',
+      onClick: (post) => {
+        onDelete(post);
+        handleClose();
+      } 
+    }
+  ]
   const [viewComments, setViewComments] = useState<boolean>(false);
+  const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
+
   const postAuthor = post?.posted_by;
   const vote = user && Object.values(user).length ? hasVoted(post, user) : null;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setActionsAnchor(event.currentTarget);
+  }
+
+  const handleClose = () => {
+    setActionsAnchor(null);
+  }
   return (
     <>
       <ListItem alignItems="flex-start">
@@ -118,6 +156,33 @@ const PostCard = ({
             <IconButton
               size="small"
               aria-label="comment"
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              keepMounted
+              onClose={handleClose}
+              anchorEl={actionsAnchor}
+              open={Boolean(actionsAnchor)}
+            >
+              {
+                ACTIONS.map(action => (
+                  <MenuItem
+                    dense
+                    key={action.name}
+                    className={classes.Item_Action}
+                    onClick={() => action.onClick(post)}
+                  >
+                    {action.icon}
+                    {action.name}
+                  </MenuItem>
+                ))
+              }
+            </Menu>
+            {/* <IconButton
+              size="small"
+              aria-label="comment"
               onClick={() => onComment(post)}
             >
               <ChatBubbleOutlinedIcon />
@@ -127,7 +192,7 @@ const PostCard = ({
             </IconButton>
             <IconButton size="small" onClick={() => onDelete(post)}>
               <DeleteIcon />
-            </IconButton>
+            </IconButton> */}
           </ListItemSecondaryAction>
         )}
       </ListItem>

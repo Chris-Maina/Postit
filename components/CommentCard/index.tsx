@@ -1,45 +1,46 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import EditIcon from '@material-ui/icons/Edit';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListItem from "@material-ui/core/ListItem";
-import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from "@material-ui/core/Typography";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/EditOutlined';
 import ListItemText from "@material-ui/core/ListItemText";
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import SpeedDial from '@material-ui/lab/SpeedDial';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './CommentCard.module.scss';
 import { getUserFullname } from '../../helpers/postHelpers';
 
 const CommentCard = ({ comment, className, variant, onEdit, onDelete }) => {
-  const [speedDialOpen, setSpeedDialOpen] = useState<boolean>(false);
-  const Actions = [
+  const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
+  const ACTIONS = [
     {
       label: 'Edit',
-      action: () => {
+      onClick: () => {
         onEdit(comment);
-        handleSpeedDialClose();
+        handleMenuClose();
       },
-      icon: <EditIcon />
+      icon: <EditIcon fontSize="small"  className={classes.Comment_Action_Icon}/>
     },
     {
       label: 'Delete',
-      action: () => {
+      onClick: () => {
         onDelete(comment)
-        handleSpeedDialClose();
+        handleMenuClose();
       },
-      icon: <DeleteIcon />
+      icon: <DeleteIcon fontSize="small"  className={classes.Comment_Action_Icon}/>
     }
   ];
 
-  const handleSpeedDialOpen = () => {
-    setSpeedDialOpen(true);
+  const handleMenuClick = (evt: React.MouseEvent<HTMLElement>) => {
+    setActionsAnchor(evt.currentTarget);
   }
 
-  const handleSpeedDialClose = () => {
-    setSpeedDialOpen(false);
+  const handleMenuClose = () => {
+    setActionsAnchor(null);
   };
 
 
@@ -66,34 +67,31 @@ const CommentCard = ({ comment, className, variant, onEdit, onDelete }) => {
         }
       />
       <ListItemSecondaryAction>
-        <SpeedDial
-          ariaLabel="speed dial"
-          direction="left"
-          open={speedDialOpen}
-          icon={<MoreVertIcon />}
-          onOpen={handleSpeedDialOpen}
-          onClose={handleSpeedDialClose}
-          FabProps={{
-            classes: {
-              root: classes.Comment_SpeedDialFab
-            }
-          }}
+        <IconButton
+          size="small"
+          aria-label="comment"
+          onClick={handleMenuClick}
         >
-          {Actions.map(option => (
-            <SpeedDialAction
-              key={option.label}
-              icon={option.icon}
-              tooltipTitle={option.label}
-              tooltipPlacement="top"
-              FabProps={{
-                classes: {
-                  root: classes.Comment_SpeedDialFab
-                }
-              }}
-              onClick={option.action}
-            />
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          keepMounted
+          anchorEl={actionsAnchor}
+          onClose={handleMenuClose}
+          open={Boolean(actionsAnchor)}
+        >
+          {ACTIONS.map(action => (
+            <MenuItem
+              dense
+              key={action.label}
+              onClick={action.onClick}
+              className={classes.Comment_Action}
+            >
+              {action.icon}
+              {action.label}
+            </MenuItem>
           ))}
-        </SpeedDial>
+        </Menu>
       </ListItemSecondaryAction>
     </ListItem>
   );
