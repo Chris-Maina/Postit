@@ -37,8 +37,8 @@ export default function Home({ posts }) {
 
   useEffect(() => {
     const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
-    const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':3100'
-    const socket = new WebSocket(echoSocketUrl);
+    const socketUrl = socketProtocol + '//' + process.env.NEXT_PUBLIC_SOCKET_HOST_NAME_PORT;
+    const socket = new WebSocket(socketUrl);
 
     socket.onopen = () => {
       console.log('WebSocket Client Connected');
