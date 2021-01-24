@@ -3,6 +3,7 @@ import useSWR, { mutate } from 'swr';
 import { GetStaticProps } from 'next';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Snackbar from '@material-ui/core/Snackbar';
 import LoginDialog from '../components/LoginDialog';
 import Typography from '@material-ui/core/Typography';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -17,12 +18,14 @@ import PostCard from '../components/PostCard';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useAuthContext } from '../helpers/authHelpers';
 import CommentDialog from '../components/CommentDialog';
+import { ADD_POST, DELETE_POST } from '../common/constants';
 
 export default function Home({ posts }) {
   const { user, token, isLoggedIn } = useAuthContext();
   const [post, setPost] = useState <{[x: string]: any}>({});
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [comment, setComment] = useState<{ [x: string]: any }>({});
   const [editCommentMode, setEditCommentMode] = useState<boolean>(false);
@@ -33,11 +36,61 @@ export default function Home({ posts }) {
   });
 
   useEffect(() => {
+    const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
+    const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':3100'
+    const socket = new WebSocket(echoSocketUrl);
+
+    socket.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    socket.onmessage = event => {
+      const { post, action } = JSON.parse(event.data);
+
+      // Update cache and not revalidate
+      switch (action) {
+        case ADD_POST:
+          mutate('/posts', [post, ...data], false);
+          return;
+        case DELETE_POST:
+          mutate(
+            '/posts',
+            data.filter((el) => el.id !== parseInt(post.id, 10)),
+            false
+          );
+          return;
+        default:
+          mutate(
+            '/posts',
+            data.map(el => el.id === parseInt(post.id, 10) ? post: el),
+            false
+          );
+          return;
+      }
+    };
+    socket.onerror = event => {
+      console.log('error', event);
+      setError('Experiencing some trouble connection.');
+    }
+
+    return () => {
+      socket.close();
+    }
+  }, [])
+
+  useEffect(() => {
     // Close dialog after successful login
     if (open && isLoggedIn()) {
       setOpen(false);
     }
   }, [token]);
+
+  const handleSnackbarOpen = (message: string) => {
+    setMessage(message)
+  }
+
+  const handleSnackbarClose = () => {
+    setMessage('')
+  }
 
   const onEditClick = (post) => {
     if (!isLoggedIn()) {
@@ -45,6 +98,8 @@ export default function Home({ posts }) {
     } else {
       setPost(post);
       setEditMode(true);
+      // Scroll to the input field
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -57,19 +112,14 @@ export default function Home({ posts }) {
     setOpen(true);
   };
 
-  const onDeleteSuccess = () => {
+  const onDeleteSuccess = async () => {
     try {
-      Api.deletePost({ postId: post.id, token });
+      const response = await Api.deletePost({ postId: post.id, token });
       if (error) {
         setError('');
       }
-
-      // Update cache and not revalidate
-      mutate(
-        '/posts',
-        data.filter((el) => el.id !== post.id),
-        false
-      );
+      console.log('response', response)
+      response && handleSnackbarOpen(response.data.message);
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
@@ -192,7 +242,10 @@ export default function Home({ posts }) {
   if (!data)
     return (
       <AppDrawer>
-        <FormHelperText error={!!error || !!postsErr}>
+        <FormHelperText 
+          error={!!error || !!postsErr}
+          className={classes.errorMessage}
+        >
           {error || postsErr}
         </FormHelperText>
         <PostForm
@@ -200,6 +253,7 @@ export default function Home({ posts }) {
           editMode={editMode}
           onCancel={onCancelClick}
           openLoginDialog={openLoginDialog}
+          handleSnackbarOpen={handleSnackbarOpen}
         />
         <CircularProgress className={classes.loader} />
       </AppDrawer>
@@ -207,7 +261,10 @@ export default function Home({ posts }) {
 
   return (
     <AppDrawer>
-      <FormHelperText error={!!error || !!postsErr}>
+      <FormHelperText
+        error={!!error || !!postsErr}
+        className={classes.errorMessage}
+      >
         {error || postsErr}
       </FormHelperText>
       <PostForm
@@ -215,6 +272,7 @@ export default function Home({ posts }) {
         editMode={editMode}
         onCancel={onCancelClick}
         openLoginDialog={openLoginDialog}
+        handleSnackbarOpen={handleSnackbarOpen}
       />
       {data && !data.length ? (
         <List>
@@ -265,6 +323,17 @@ export default function Home({ posts }) {
         comment={comment}
         onClose={onCommentClose}
         editCommentMode={editCommentMode}
+      />
+      <Snackbar
+        open={Boolean(message)}
+        message={message}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        key={message}
+        autoHideDuration={6000}
       />
     </AppDrawer>
   );

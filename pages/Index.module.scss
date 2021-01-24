@@ -1,3 +1,5 @@
+@import '../styles/mixins.scss';
+
 .loader {
   position: absolute;
   left: 50%;
@@ -5,4 +7,7 @@
 }
 .postTitle {
   font-weight: bold;
+}
+.errorMessage {
+  margin-left: rem(21px) !important;
 }
