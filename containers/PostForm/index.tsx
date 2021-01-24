@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { mutate } from 'swr';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import InputBase from '@material-ui/core/InputBase';
@@ -9,7 +8,14 @@ import Api from '../../helpers/apiHelpers';
 import classes from './PostForm.module.scss';
 import { useAuthContext } from '../../helpers/authHelpers';
 
-const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
+interface PostFormProps {
+  editMode: boolean,
+  onCancel: () => void,
+  post: { [x: string]: any },
+  openLoginDialog: () => void,
+  handleSnackbarOpen: (message: string) => void,
+}
+const PostForm = ({ post, editMode, onCancel, openLoginDialog, handleSnackbarOpen }: PostFormProps) => {
   const { isLoggedIn, token } = useAuthContext();
   const [error, setError] = useState('');
   const [title, setTitle] = useState('');
@@ -35,15 +41,14 @@ const PostForm = ({ post, editMode, onCancel, openLoginDialog }) => {
       return null;
     }
     try {
+      let response = null;
       if (Object.keys(post).length) {
-        await Api.updatePost({ ...post, title, token });
+        response = await Api.updatePost({ id: post.id, title, token });
       } else {
-        await Api.addPost({ title, token });
+        response = await Api.addPost({ title, token });
       }
       onCancelClick();
-
-      // Revalidate posts
-      mutate('/posts');
+      response && handleSnackbarOpen(response.data.message);
     } catch (error) {
       if (error.response && error.response.data.error.message) {
         setError(error.response.data.error.message);
