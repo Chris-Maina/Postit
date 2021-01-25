@@ -55,14 +55,6 @@ const PostCard = ({
 }: IPostCard) => {
   const ACTIONS = [
     {
-      icon: <ChatBubbleOutlineIcon fontSize="small" className={classes.Item_Action_Icon} />,
-      name: 'Comment',
-      onClick: (post) => {
-        onComment(post);
-        handleClose();
-      } 
-    },
-    {
       icon: <EditIcon fontSize="small" className={classes.Item_Action_Icon} />,
       name: 'Edit',
       onClick: (post) => {
@@ -82,7 +74,8 @@ const PostCard = ({
   const [viewComments, setViewComments] = useState<boolean>(false);
   const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
 
-  const postAuthor = post?.posted_by;
+  // the author can be one who posted or logged in user in his/her profile
+  const postAuthor = post?.posted_by || user;
   const vote = user && Object.values(user).length ? hasVoted(post, user) : null;
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -118,15 +111,26 @@ const PostCard = ({
               <Typography color="textPrimary">{post.title}</Typography>
               <div>
                 <IconButton
+                  aria-label="chat bubble"
+                  size="small"
+                  onClick ={() => {
+                    onComment(post);
+                    handleClose();
+                  }} 
+                >
+                  <ChatBubbleOutlineIcon fontSize="small" />
+                </IconButton>
+                <span className={classes.Item_Votes}>{post?.comments?.length || 0}</span>
+                <IconButton
                   aria-label="thumb-up"
                   size="small"
                   disabled={isProfile}
                   onClick={() => onVote(post.id, '1')}
                 >
                   {vote && vote.vote_type === '1' ? (
-                    <ThumbUpIcon />
+                    <ThumbUpIcon fontSize="small" />
                   ) : (
-                    <ThumbUpOutlinedIcon />
+                      <ThumbUpOutlinedIcon fontSize="small" />
                   )}
                 </IconButton>
                 <span className={classes.Item_Votes}>{getVoteCount(post)}</span>
@@ -151,7 +155,7 @@ const PostCard = ({
             </>
           }
         />
-        {!isProfile && (
+        {(!isProfile && user?.id === post?.posted_by?.id) ? (
           <ListItemSecondaryAction>
             <IconButton
               size="small"
@@ -169,32 +173,19 @@ const PostCard = ({
               {
                 ACTIONS.map(action => (
                   <MenuItem
-                    dense
-                    key={action.name}
-                    className={classes.Item_Action}
-                    onClick={() => action.onClick(post)}
-                  >
-                    {action.icon}
-                    {action.name}
-                  </MenuItem>
+                      dense
+                      key={action.name}
+                      className={classes.Item_Action}
+                      onClick={() => action.onClick(post)}
+                    >
+                      {action.icon}
+                      {action.name}
+                    </MenuItem>
                 ))
               }
             </Menu>
-            {/* <IconButton
-              size="small"
-              aria-label="comment"
-              onClick={() => onComment(post)}
-            >
-              <ChatBubbleOutlinedIcon />
-            </IconButton>
-            <IconButton size="small" onClick={() => onEdit(post)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton size="small" onClick={() => onDelete(post)}>
-              <DeleteIcon />
-            </IconButton> */}
           </ListItemSecondaryAction>
-        )}
+        ): null}
       </ListItem>
       <Collapse in={viewComments} timeout="auto" unmountOnExit>
         {
@@ -205,6 +196,7 @@ const PostCard = ({
                   key={comment.id}
                   comment={comment}
                   variant="body2"
+                  user={user}
                   onEdit={onEditComment}
                   onDelete={onDeleteComment}
                   className={classes.Item_Comment}

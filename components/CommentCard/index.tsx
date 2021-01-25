@@ -14,7 +14,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import classes from './CommentCard.module.scss';
 import { getUserFullname } from '../../helpers/postHelpers';
 
-const CommentCard = ({ comment, className, variant, onEdit, onDelete }) => {
+const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) => {
   const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
   const ACTIONS = [
     {
@@ -66,33 +66,35 @@ const CommentCard = ({ comment, className, variant, onEdit, onDelete }) => {
           </>
         }
       />
-      <ListItemSecondaryAction>
-        <IconButton
-          size="small"
-          aria-label="comment"
-          onClick={handleMenuClick}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          keepMounted
-          anchorEl={actionsAnchor}
-          onClose={handleMenuClose}
-          open={Boolean(actionsAnchor)}
-        >
-          {ACTIONS.map(action => (
-            <MenuItem
-              dense
-              key={action.label}
-              onClick={action.onClick}
-              className={classes.Comment_Action}
-            >
-              {action.icon}
-              {action.label}
-            </MenuItem>
-          ))}
-        </Menu>
-      </ListItemSecondaryAction>
+      {(user?.id === comment?.commented_by?.id) ? (
+        <ListItemSecondaryAction>
+          <IconButton
+            size="small"
+            aria-label="comment"
+            onClick={handleMenuClick}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            keepMounted
+            anchorEl={actionsAnchor}
+            onClose={handleMenuClose}
+            open={Boolean(actionsAnchor)}
+          >
+            {ACTIONS.map(action => (
+              <MenuItem
+                dense
+                key={action.label}
+                onClick={action.onClick}
+                className={classes.Comment_Action}
+              >
+                {action.icon}
+                {action.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </ListItemSecondaryAction>
+      ) : null}
     </ListItem>
   );
 }
