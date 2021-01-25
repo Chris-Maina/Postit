@@ -69,7 +69,7 @@ export default function Home({ posts }) {
     };
     socket.onerror = event => {
       console.log('error', event);
-      setError('Experiencing some trouble connection.');
+      setError('Experiencing some trouble with the connection.');
     }
 
     return () => {
@@ -118,7 +118,7 @@ export default function Home({ posts }) {
       if (error) {
         setError('');
       }
-      console.log('response', response)
+
       response && handleSnackbarOpen(response.data.message);
     } catch (error) {
       if (error.response && error.response.data.error.message) {
