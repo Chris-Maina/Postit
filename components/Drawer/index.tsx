@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import clsx from 'clsx';
+import { NextSeo } from 'next-seo';
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -62,94 +63,111 @@ const AppDrawer = (props) => {
     setProfileOpen(!profileOpen);
   };
 
+  let pageName = 'Posts'
+  if (router.pathname !== '/') {
+    pageName = router.pathname.charAt(1).toUpperCase() + router.pathname.slice(2)
+  }
+  const title = `Posit - ${pageName}`;
+  const url = `https://postit.chris-maina.vercel.app${router.pathname}`;
+
   return (
-    <div className={classes.Root}>
-      <AppBar
-        position="fixed"
-        className={clsx(classes.AppBar, {
-          [classes.AppBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setOpen(true)}
-            className={clsx(classes.MenuButton, open && classes.Hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Postit
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="persistent"
-        anchor="left"
-        open={open}
-        className={classes.Drawer}
-        classes={{
-          paper: classes.DrawerPaper,
+    <>
+      <NextSeo
+        title={title}
+        canonical={url}
+        openGraph={{
+          url,
+          title,
         }}
-      >
-        <div className={classes.DrawerHeader}>
-          <Typography 
-            noWrap
-            variant="h6"
-            className={classes.DrawerHeader_Logo}
-          >
-            Postit
+      />
+      <div className={classes.Root}>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.AppBar, {
+            [classes.AppBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => setOpen(true)}
+              className={clsx(classes.MenuButton, open && classes.Hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Postit
           </Typography>
-          <IconButton onClick={() => setOpen(false)}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <NavItem linkTo="/" linkText="Posts" />
-          <NavItem linkTo="/users" linkText="Users" />
-        </List>
-        {user && Object.values(user).length ? (
-          <List dense className={classes.BottomNav}>
-            <ListItem button onClick={handleToggleClick}>
-              <ListItemText primary={`${user.first_name} ${user.last_name}`} />
-              <ListItemIcon>
-                {profileOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </ListItemIcon>
-            </ListItem>
-            <Collapse in={profileOpen} timeout="auto" unmountOnExit>
-              <List dense component="div" disablePadding>
-                <NavItem linkTo="/profile" linkText="Profile" />
-                <ListItem button onClick={logout}>
-                  <ListItemText primary="Logout" />
-                </ListItem>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="persistent"
+          anchor="left"
+          open={open}
+          className={classes.Drawer}
+          classes={{
+            paper: classes.DrawerPaper,
+          }}
+        >
+          <div className={classes.DrawerHeader}>
+            <Typography
+              noWrap
+              variant="h6"
+              className={classes.DrawerHeader_Logo}
+            >
+              Postit
+          </Typography>
+            <IconButton onClick={() => setOpen(false)}>
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                  <ChevronRightIcon />
+                )}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <NavItem linkTo="/" linkText="Posts" />
+            <NavItem linkTo="/users" linkText="Users" />
+          </List>
+          {user && Object.values(user).length ? (
+            <List dense className={classes.BottomNav}>
+              <ListItem button onClick={handleToggleClick}>
+                <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+                <ListItemIcon>
+                  {profileOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </ListItemIcon>
+              </ListItem>
+              <Collapse in={profileOpen} timeout="auto" unmountOnExit>
+                <List dense component="div" disablePadding>
+                  <NavItem linkTo="/profile" linkText="Profile" />
+                  <ListItem button onClick={logout}>
+                    <ListItemText primary="Logout" />
+                  </ListItem>
+                </List>
+              </Collapse>
+            </List>
+          ) : (
+              <List dense className={classes.BottomNav}>
+                <NavItem linkTo="/login" linkText="Login" />
+                <NavItem linkTo="/register" linkText="Register" />
               </List>
-            </Collapse>
-          </List>
-        ) : (
-          <List dense className={classes.BottomNav}>
-            <NavItem linkTo="/login" linkText="Login" />
-            <NavItem linkTo="/register" linkText="Register" />
-          </List>
-        )}
-      </Drawer>
-      <div
-        className={clsx(classes.Content, {
-          [classes.ContentShift]: open,
-        })}
-      >
-        <main>
-          <div className={classes.DrawerHeader} />
-          {props.children}
-        </main>
+            )}
+        </Drawer>
+        <div
+          className={clsx(classes.Content, {
+            [classes.ContentShift]: open,
+          })}
+        >
+          <main>
+            <div className={classes.DrawerHeader} />
+            {props.children}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
