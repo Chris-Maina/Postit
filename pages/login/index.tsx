@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import LoginForm from '../../containers/LoginForm';
 import classes from '../register/Register.module.scss';
 
-const Register = () => {
+const Login = () => {
   return (
     <div className={classes.Register}>
       <Paper className={classes.Register_Wrapper}>
@@ -29,4 +29,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
