@@ -279,15 +279,8 @@ export default function Home({ posts }) {
           <ListItem>
             <ListItemText
               disableTypography
-              primary={
-                <Typography variant="h4">
-                  There are no posts currently.{' '}
-                  <span role="img" aria-label="writing hand">
-                    ✍️
-                  </span>{' '}
-                  it!
-                </Typography>
-              }
+              className={classes.noPostText}
+              primary="What's on your mind? Postit!"
             />
           </ListItem>
         </List>

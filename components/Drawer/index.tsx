@@ -119,7 +119,7 @@ const AppDrawer = (props) => {
               className={classes.DrawerHeader_Logo}
             >
               Postit
-          </Typography>
+            </Typography>
             <IconButton onClick={() => setOpen(false)}>
               {theme.direction === 'ltr' ? (
                 <ChevronLeftIcon />
