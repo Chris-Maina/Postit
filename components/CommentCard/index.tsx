@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import Head from 'next/head';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItem from "@material-ui/core/ListItem";
@@ -12,9 +13,9 @@ import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './CommentCard.module.scss';
-import { getUserFullname } from '../../helpers/postHelpers';
+import { getCommentSchema, getUserFullname } from '../../helpers/postHelpers';
 
-const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) => {
+const CommentCard = ({ user, postId, comment, className, variant, onEdit, onDelete }) => {
   const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
   const ACTIONS = [
     {
@@ -23,7 +24,7 @@ const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) =>
         onEdit(comment);
         handleMenuClose();
       },
-      icon: <EditIcon fontSize="small"  className={classes.Comment_Action_Icon}/>
+      icon: <EditIcon fontSize="small" className={classes.Comment_Action_Icon} />
     },
     {
       label: 'Delete',
@@ -31,7 +32,7 @@ const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) =>
         onDelete(comment)
         handleMenuClose();
       },
-      icon: <DeleteIcon fontSize="small"  className={classes.Comment_Action_Icon}/>
+      icon: <DeleteIcon fontSize="small" className={classes.Comment_Action_Icon} />
     }
   ];
 
@@ -45,57 +46,66 @@ const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) =>
 
 
   return (
-    <ListItem className={clsx(className, classes.Comment)}>
-      <ListItemText
-        primary={
-          <>
-            <Typography
-              variant={variant}
-              component="span"
-              className={classes.Comment_User}
-            >
-              {getUserFullname(comment.commented_by)}
-            </Typography>
-            <Typography
-              variant={variant}
-              component="span"
-              color="textPrimary"
-            >
-              {comment.title}
-            </Typography>
-          </>
-        }
-      />
-      {(user?.id === comment?.commented_by?.id) ? (
-        <ListItemSecondaryAction>
-          <IconButton
-            size="small"
-            aria-label="comment"
-            onClick={handleMenuClick}
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            keepMounted
-            anchorEl={actionsAnchor}
-            onClose={handleMenuClose}
-            open={Boolean(actionsAnchor)}
-          >
-            {ACTIONS.map(action => (
-              <MenuItem
-                dense
-                key={action.label}
-                onClick={action.onClick}
-                className={classes.Comment_Action}
+    <>
+      <Head>
+        <script
+          key={comment.id}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getCommentSchema(comment, postId)) }}
+        />
+      </Head>
+      <ListItem className={clsx(className, classes.Comment)}>
+        <ListItemText
+          primary={
+            <>
+              <Typography
+                variant={variant}
+                component="span"
+                className={classes.Comment_User}
               >
-                {action.icon}
-                {action.label}
-              </MenuItem>
-            ))}
-          </Menu>
-        </ListItemSecondaryAction>
-      ) : null}
-    </ListItem>
+                {getUserFullname(comment.commented_by)}
+              </Typography>
+              <Typography
+                variant={variant}
+                component="span"
+                color="textPrimary"
+              >
+                {comment.title}
+              </Typography>
+            </>
+          }
+        />
+        {(user?.id === comment?.commented_by?.id) ? (
+          <ListItemSecondaryAction>
+            <IconButton
+              size="small"
+              aria-label="comment"
+              onClick={handleMenuClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              keepMounted
+              anchorEl={actionsAnchor}
+              onClose={handleMenuClose}
+              open={Boolean(actionsAnchor)}
+            >
+              {ACTIONS.map(action => (
+                <MenuItem
+                  dense
+                  key={action.label}
+                  onClick={action.onClick}
+                  className={classes.Comment_Action}
+                >
+                  {action.icon}
+                  {action.label}
+                </MenuItem>
+              ))}
+            </Menu>
+          </ListItemSecondaryAction>
+        ) : null}
+      </ListItem>
+    </>
   );
 }
 
