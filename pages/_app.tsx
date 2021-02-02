@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
         <link rel="manifest" href="/favicons/site.webmanifest" />
+        <meta name="google-site-verification" content="VgjM_h6e896v_XBbVIPOf0EznuwJKlDXWFnBIyKJgzI" />
       </Head>
       <AuthProvider>
         <CssBaseline />
