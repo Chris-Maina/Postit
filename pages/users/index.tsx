@@ -35,7 +35,7 @@ export default function Users({ users }) {
             <ListItemText
               disableTypography
               primary={
-                <Typography className={classes.ItemText} variant="h4">
+                <Typography className={classes.ItemText}>
                   Yay{' '}
                   <span role="img" aria-label="party popper">
                     🎉

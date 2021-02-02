@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import { format } from 'date-fns';
 import List from '@material-ui/core/List';
 import Menu from '@material-ui/core/Menu';
@@ -25,6 +26,7 @@ import classes from './PostCard.module.scss';
 import {
   hasVoted,
   getVoteCount,
+  getPostSchema,
   getUserInitial,
   getUserFullname,
 } from '../../helpers/postHelpers';
@@ -87,6 +89,13 @@ const PostCard = ({
   }
   return (
     <>
+      <Head>
+        <script
+          key={post.id}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getPostSchema(post, postAuthor)) }}
+        />
+      </Head>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar>{getUserInitial(postAuthor)}</Avatar>
@@ -197,6 +206,7 @@ const PostCard = ({
                   comment={comment}
                   variant="body2"
                   user={user}
+                  postId={post.id}
                   onEdit={onEditComment}
                   onDelete={onDeleteComment}
                   className={classes.Item_Comment}
