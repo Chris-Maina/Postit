@@ -79,6 +79,7 @@ const AppDrawer = (props) => {
           url,
           title,
         }}
+        noindex={pageName === 'Profile'}
       />
       <div className={classes.Root}>
         <AppBar

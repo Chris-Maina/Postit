@@ -1,5 +1,5 @@
 const title = 'Postit - have fun with posts';
-const description = 'Create posts, comment, upvote and downvote.';
+const description = 'Postit allows you add/create posts, view, comment, upvote and downvote posts you like.';
 
 export default {
   title,
