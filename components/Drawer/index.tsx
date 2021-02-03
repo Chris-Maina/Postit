@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import Head from 'next/head';
 import { NextSeo } from 'next-seo';
 import List from '@material-ui/core/List';
+import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -19,20 +20,20 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import NavItem from '../NavItem';
 import classes from './Drawer.module.scss';
+import useViewPort from '../../helpers/useViewPort';
 import { useAuthContext } from '../../helpers/authHelpers';
 import { getBreadcrumbListSchema } from '../../common/jsonLdSchema';
 
 const AppDrawer = (props) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const theme = useTheme();
   const router = useRouter();
+  const { width } = useViewPort();
   const { user, token, fetchUser, logout, getToken } = useAuthContext();
 
   useEffect(() => {
@@ -64,6 +65,10 @@ const AppDrawer = (props) => {
   const handleToggleClick = () => {
     setProfileOpen(!profileOpen);
   };
+
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+  }
 
   let pageName = 'Posts'
   if (router.pathname !== '/') {
@@ -111,65 +116,67 @@ const AppDrawer = (props) => {
           </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={open}
-          className={classes.Drawer}
-          classes={{
-            paper: classes.DrawerPaper,
-          }}
-        >
-          <div className={classes.DrawerHeader}>
-            <Typography
-              noWrap
-              variant="h6"
-              className={classes.DrawerHeader_Logo}
+        <nav className={classes.Drawer}>
+          <Hidden
+            smUp={width < 600} // small screen devices
+            xsDown={width > 600} // large screen devices
+            implementation="css"
+          >
+            <Drawer
+              open={width < 600 ? open : true}
+              classes={{
+                paper: classes.DrawerPaper,
+              }}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              onClose={handleDrawerToggle}
+              variant={width < 600 ? "temporary" : "persistent"}
+              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             >
-              Postit
-            </Typography>
-            <IconButton onClick={() => setOpen(false)}>
-              {theme.direction === 'ltr' ? (
-                <ChevronLeftIcon />
-              ) : (
-                  <ChevronRightIcon />
-                )}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <NavItem linkTo="/" linkText="Posts" />
-            <NavItem linkTo="/users" linkText="Users" />
-          </List>
-          {user && Object.values(user).length ? (
-            <List dense className={classes.BottomNav}>
-              <ListItem button onClick={handleToggleClick}>
-                <ListItemText primary={`${user.first_name} ${user.last_name}`} />
-                <ListItemIcon>
-                  {profileOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                </ListItemIcon>
-              </ListItem>
-              <Collapse in={profileOpen} timeout="auto" unmountOnExit>
-                <List dense component="div" disablePadding>
-                  <NavItem linkTo="/profile" linkText="Profile" />
-                  <ListItem button onClick={logout}>
-                    <ListItemText primary="Logout" />
-                  </ListItem>
-                </List>
-              </Collapse>
-            </List>
-          ) : (
-              <List dense className={classes.BottomNav}>
-                <NavItem linkTo="/login" linkText="Login" />
-                <NavItem linkTo="/register" linkText="Register" />
+              <div className={classes.DrawerHeader}>
+                <img src="/favicons/favicon-32x32.png" alt="logo" />
+                <Typography
+                  noWrap
+                  variant="h6"
+                  color="primary"
+                  className={classes.DrawerHeader_Logo}
+                >
+                  Postit
+                </Typography>
+              </div>
+              <Divider />
+              <List>
+                <NavItem linkTo="/" linkText="Posts" />
+                <NavItem linkTo="/users" linkText="Users" />
               </List>
-            )}
-        </Drawer>
-        <div
-          className={clsx(classes.Content, {
-            [classes.ContentShift]: open,
-          })}
-        >
+              {user && Object.values(user).length ? (
+                <List dense className={classes.BottomNav}>
+                  <ListItem button onClick={handleToggleClick}>
+                    <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+                    <ListItemIcon>
+                      {profileOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </ListItemIcon>
+                  </ListItem>
+                  <Collapse in={profileOpen} timeout="auto" unmountOnExit>
+                    <List dense component="div" disablePadding>
+                      <NavItem linkTo="/profile" linkText="Profile" />
+                      <ListItem button onClick={logout}>
+                        <ListItemText primary="Logout" />
+                      </ListItem>
+                    </List>
+                  </Collapse>
+                </List>
+              ) : (
+                  <List dense className={classes.BottomNav}>
+                    <NavItem linkTo="/login" linkText="Login" />
+                    <NavItem linkTo="/register" linkText="Register" />
+                  </List>
+                )}
+            </Drawer>
+          </Hidden>
+        </nav>
+        <div className={classes.Content}>
           <main>
             <div className={classes.DrawerHeader} />
             {props.children}

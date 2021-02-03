@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .Root {
   display: flex;
 }
@@ -5,8 +7,10 @@
   transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms, width cubic-bezier(0.4, 0, 0.6, 1) 195ms;
 }
 .AppBarShift {
-  width: calc(100% - 240px);
-  margin-left: 240px;
+  @media screen and (min-width: $small-screen) {
+    width: calc(100% - 240px);
+    margin-left: 240px;
+  }
   transition: margin cubic-bezier(0.0, 0, 0.2, 1) 225ms, width cubic-bezier(0.0, 0, 0.2, 1) 225ms;
 }
 .MenuButton {
@@ -16,8 +20,10 @@
   display: none;
 }
 .Drawer {
-  width: 240px;
-  flex-shrink: 0;
+  @media screen and (min-width: $small-screen) {
+    width: 240px;
+    flex-shrink: 0;
+  }
 }
 .DrawerPaper {
   width: 240px;
@@ -27,11 +33,14 @@
   align-items: center;
   padding: 0px 8px;
   min-height: 56px;
-  justify-content: space-between;
 
   &_Logo {
-    padding-left: 8px;
     font-weight: 600 !important;
+  }
+
+  img {
+    margin-left: 8px;
+    margin-right: rem(10px);
   }
 
   @media (min-width: 0px) and (orientation: landscape){
@@ -45,12 +54,6 @@
   flex-grow: 1;
   width: 100%;
   padding: 24px 0px;
-  margin-left: -240px;
-  transition: margin cubic-bezier(0.4, 0, 0.6, 1) 195ms;
-}
-.ContentShift {
-  margin-left: 0px;
-  transition: margin cubic-bezier(0.0, 0, 0.2, 1) 225ms;
 }
 .BottomNav {
   position: absolute !important;
