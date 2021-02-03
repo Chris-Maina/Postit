@@ -13,9 +13,10 @@ import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import classes from './CommentCard.module.scss';
-import { getCommentSchema, getUserFullname } from '../../helpers/postHelpers';
+import { getCommentSchema } from '../../common/jsonLdSchema';
+import { getUserFullname } from '../../helpers/postHelpers';
 
-const CommentCard = ({ user, postId, comment, className, variant, onEdit, onDelete }) => {
+const CommentCard = ({ user, comment, className, variant, onEdit, onDelete }) => {
   const [actionsAnchor, setActionsAnchor] = useState<null | HTMLElement>(null);
   const ACTIONS = [
     {
@@ -51,7 +52,7 @@ const CommentCard = ({ user, postId, comment, className, variant, onEdit, onDele
         <script
           key={comment.id}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(getCommentSchema(comment, postId)) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getCommentSchema(comment)) }}
         />
       </Head>
       <ListItem className={clsx(className, classes.Comment)}>

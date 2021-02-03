@@ -45,38 +45,3 @@ export const getUpDownVoteCount = (post) => {
   });
   return { downvotes, upvotes }
 };
-
-export const getPostSchema = (post, author) => {
-  let count = getUpDownVoteCount(post)
-  return {
-    '@context': 'http://schema.org',
-    '@type': 'Comment',
-    '@id': post.id,
-    'dateCreated': post.created_at,
-    'headline': post.title,
-    'author': getUserSchema(author),
-    'upvoteCount': count.upvotes,
-    'downvoteCount': count.downvotes,
-    'commentCount': post?.comments?.length || 0,
-    'keywords': 'post'
-  }
-}
-
-export const getCommentSchema = (comment, postId) => ({
-  '@context': 'http://schema.org',
-  '@type': 'Comment',
-  '@id': comment.id,
-  'parentItem': {
-    '@type': 'Comment',
-    '@id': postId,
-  },
-  'dateCreated': comment.created_at,
-  'headline': comment.title,
-  'author': getUserSchema(comment.commented_by),
-  'keywords': ['post', 'comment']
-});
-
-export const getUserSchema = user => ({
-  '@type': 'Person',
-  'name': getUserFullname(user),
-})

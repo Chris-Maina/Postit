@@ -26,11 +26,11 @@ import classes from './PostCard.module.scss';
 import {
   hasVoted,
   getVoteCount,
-  getPostSchema,
   getUserInitial,
   getUserFullname,
 } from '../../helpers/postHelpers';
 import CommentCard from '../CommentCard';
+import { getPostSchema } from '../../common/jsonLdSchema';
 import { IComment, IPost, IUser } from '../../common/interfaces';
 interface IPostCard {
   post: IPost;
@@ -206,7 +206,6 @@ const PostCard = ({
                   comment={comment}
                   variant="body2"
                   user={user}
-                  postId={post.id}
                   onEdit={onEditComment}
                   onDelete={onDeleteComment}
                   className={classes.Item_Comment}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import clsx from 'clsx';
+import Head from 'next/head';
 import { NextSeo } from 'next-seo';
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
@@ -24,6 +25,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import NavItem from '../NavItem';
 import classes from './Drawer.module.scss';
 import { useAuthContext } from '../../helpers/authHelpers';
+import { getBreadcrumbListSchema } from '../../common/jsonLdSchema';
 
 const AppDrawer = (props) => {
   const [open, setOpen] = useState(true);
@@ -72,6 +74,12 @@ const AppDrawer = (props) => {
 
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(getBreadcrumbListSchema()) }}
+        />
+      </Head>
       <NextSeo
         title={title}
         canonical={url}
