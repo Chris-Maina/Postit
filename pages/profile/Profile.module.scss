@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .loader {
   position: absolute;
   left: 50%;
@@ -5,28 +7,41 @@
 }
 
 .Section {
-  margin-left: 40px;
+  margin-left: 20px;
   margin-bottom: 50px;
+  @media screen and (min-width: $small-screen) {
+    margin-left: 40px;
+  }
 
   &_General {
     display: flex;
-
-    &_Form {
-      flex: 1
+    flex-direction: column;
+    @media screen and (min-width: $small-screen) {
+      flex-direction: row;
     }
   }
 
   &_Avatar {
     margin-right: 30px;
-    width: 250px !important;
-    height: 250px !important;
-    font-size: 6.5rem !important;
+    margin-bottom: 10px;
+    width: 150px !important;
+    height: 150px !important;
+    font-size: 5.5rem !important;
+    @media screen and (min-width: $small-screen) {
+      margin-right: 30px;
+      width: 250px !important;
+      height: 250px !important;
+      font-size: 6.5rem !important;
+    }
   }
 
   &_Form {
-    max-width: 600px;
+    width: 95%;
     display: flex;
     flex-direction: column;
+     @media screen and (min-width: $small-screen) {
+       max-width: 600px;
+     }
 
     &_Label {
       font-weight: 600;
@@ -39,8 +54,12 @@
     }
 
     &_Button {
-      width: 20%;
+      width: 100%;
       margin-top: 10px !important;
+
+      @media screen and (min-width: $small-screen) {
+        width: 20%;
+      }
     }
 
     &_Button_Root {
