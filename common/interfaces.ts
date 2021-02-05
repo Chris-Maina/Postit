@@ -22,3 +22,10 @@ export interface IComment {
   updated_at?: string;
   commented_by?: IUser;
 }
+
+export interface GTagEvent {
+  action: string;
+  category: string;
+  label: string;
+  value: number;
+}

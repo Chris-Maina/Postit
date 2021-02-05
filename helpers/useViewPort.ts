@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 
 const useViewPort = () => {
-  const [width, setWidth] = useState(null);
+  // set the initial width to be desktop/greater than mobile
+  const [width, setWidth] = useState(601);
   useEffect(() => {
     const handleWindowResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleWindowResize);

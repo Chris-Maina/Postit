@@ -1,14 +1,18 @@
 import '../styles/globals.css';
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import type { AppProps } from 'next/app';
 import { DefaultSeo } from 'next-seo';
+import { useRouter } from 'next/router';
+import type { AppProps } from 'next/app';
+
 // import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { AuthProvider } from '../helpers/authHelpers';
 import SEO from '../next-seo.config';
+import * as gtag from '../common/gtag';
+import { AuthProvider } from '../helpers/authHelpers';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   useEffect(() => {
     // Remove the server side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -16,6 +20,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   });
+
+  useEffect(() => {
+    const handleRouteChange = url => {
+      gtag.pageView(url);
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    }
+  }, [router.events]);
   return (
     <>
       <Head>
