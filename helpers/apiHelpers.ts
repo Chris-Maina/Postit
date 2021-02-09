@@ -4,6 +4,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE;
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
+  withCredentials: true,
 });
 
 const addTokenToHeaders = (token) => {
