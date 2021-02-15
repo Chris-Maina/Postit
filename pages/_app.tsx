@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-  });
+  }, []);
 
   useEffect(() => {
     const handleRouteChange = url => {
